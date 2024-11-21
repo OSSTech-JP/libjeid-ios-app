@@ -291,9 +291,13 @@ class DLReaderViewController: WrapperViewController, NFCTagReaderSessionDelegate
                     dataDict["dl-registered-domicile"] = try self.dlStringToDictArray(registeredDomicile.registeredDomicile)
 
                     let photo = try files.getPhoto()
-                    if let photoData = photo.photoData {
-                        let src = "data:image/jp2;base64,\(photoData.base64EncodedString())"
-                        dataDict["dl-photo"] = src
+                    // 顔写真をCGImageオブジェクトで取得
+                    if let photoImage = photo.photoImage {
+                        // CGImageオブジェクトからJpeg形式に変換
+                        if let jpegData = try self.encodeJpeg(photoImage) {
+                            let src = "data:image/jpeg;base64,\(jpegData.base64EncodedString())"
+                            dataDict["dl-photo"] = src
+                        }
                     }
 
                     let changedRegDomicile = try files.getChangedRegisteredDomicile()

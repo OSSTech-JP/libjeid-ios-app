@@ -203,9 +203,13 @@ class INReaderViewController: WrapperViewController, NFCTagReaderSessionDelegate
                     let src = "data:image/png;base64,\(addressImage.base64EncodedString())"
                     dataDict["cardinfo-address-image"] = src
                 }
-                if let photoData = visualEntries.photoData {
-                    let src = "data:image/jp2;base64,\(photoData.base64EncodedString())"
-                    dataDict["cardinfo-photo"] = src
+
+                if let photoImage = visualEntries.photoImage {
+                    // CGImageオブジェクトからJpeg形式に変換
+                    if let jpegData = try self.encodeJpeg(photoImage) {
+                        let src = "data:image/jpeg;base64,\(jpegData.base64EncodedString())"
+                        dataDict["cardinfo-photo"] = src
+                    }
                 }
 
                 do {

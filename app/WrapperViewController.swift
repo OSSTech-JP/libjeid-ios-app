@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import ImageIO
+import MobileCoreServices
 
 class WrapperViewController: UIViewController, UITextFieldDelegate {
     var logView: UITextView?
@@ -179,5 +181,21 @@ class WrapperViewController: UIViewController, UITextFieldDelegate {
             viewController.dismiss(animated: false, completion: nil)
         }
         self.present(optionsMenuViewController, animated: false, completion: nil)
+    }
+
+    // CGImageオブジェクトをJpeg形式に変換
+    func encodeJpeg(_ image: CGImage) throws -> Data? {
+        let jpegData = NSMutableData()
+        guard let destination = CGImageDestinationCreateWithData(jpegData, kUTTypeJPEG, 1, nil) else {
+            return nil
+        }
+        let options: [CFString: Any] = [kCGImageDestinationLossyCompressionQuality: 0.9]
+        CGImageDestinationAddImage(destination, image, options as CFDictionary)
+        
+        if CGImageDestinationFinalize(destination) {
+            return jpegData as Data
+        } else {
+            return nil
+        }
     }
 }
