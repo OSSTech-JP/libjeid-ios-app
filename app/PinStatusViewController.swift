@@ -10,33 +10,38 @@ import CoreNFC
 import UIKit
 import libjeid
 
-class PinStatusViewController: WrapperViewController, NFCTagReaderSessionDelegate {
+class PinStatusViewController: WrapperViewController,
+    NFCTagReaderSessionDelegate
+{
     var pinStatusView: PinStatusView!
     var session: NFCTagReaderSession?
 
     override func loadView() {
         self.title = "暗証番号ステータス"
         pinStatusView = PinStatusView()
-        pinStatusView.startButton.addTarget(self, action: #selector(pushStartButton), for: .touchUpInside)
+        pinStatusView.startButton.addTarget(
+            self, action: #selector(pushStartButton), for: .touchUpInside)
 
         let wrapperView = WrapperView(pinStatusView)
         wrapperView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         self.view = wrapperView
     }
 
-    @objc func pushStartButton(sender: UIButton){
+    @objc func pushStartButton(sender: UIButton) {
         if let activeField = self.activeField {
             activeField.resignFirstResponder()
         }
-        if (!NFCReaderSession.readingAvailable) {
+        if !NFCReaderSession.readingAvailable {
             self.openAlertView("エラー", "お使いの端末はNFCに対応していません。")
             return
         }
         self.clearPublishedLog()
-        if let _ = self.session {
+        if self.session != nil {
             publishLog("しばらく待ってから再度お試しください")
         } else {
-            self.session = NFCTagReaderSession(pollingOption: [.iso14443], delegate: self, queue: DispatchQueue.global())
+            self.session = NFCTagReaderSession(
+                pollingOption: [.iso14443], delegate: self,
+                queue: DispatchQueue.global())
             self.session?.alertMessage = "カードに端末をかざしてください"
             self.session?.begin()
             self.pinStatusView.startButton.alpha = Self.INACTIVE_ALPHA
@@ -47,13 +52,18 @@ class PinStatusViewController: WrapperViewController, NFCTagReaderSessionDelegat
         print("tagReaderSessionDidBecomeActive: \(Thread.current)")
     }
 
-    func tagReaderSession(_ session: NFCTagReaderSession,
-                          didInvalidateWithError error: Error) {
+    func tagReaderSession(
+        _ session: NFCTagReaderSession,
+        didInvalidateWithError error: Error
+    ) {
         if let nfcError = error as? NFCReaderError {
             if nfcError.code != .readerSessionInvalidationErrorUserCanceled {
-                print("tagReaderSession error: " + nfcError.localizedDescription)
+                print(
+                    "tagReaderSession error: " + nfcError.localizedDescription)
                 self.publishLog("エラー: " + nfcError.localizedDescription)
-                if nfcError.code == .readerSessionInvalidationErrorSessionTerminatedUnexpectedly {
+                if nfcError.code
+                    == .readerSessionInvalidationErrorSessionTerminatedUnexpectedly
+                {
                     self.publishLog("しばらく待ってから再度お試しください")
                 }
             }
@@ -66,8 +76,10 @@ class PinStatusViewController: WrapperViewController, NFCTagReaderSessionDelegat
         }
     }
 
-    func tagReaderSession(_ session: NFCTagReaderSession,
-                          didDetect tags: [NFCTag]) {
+    func tagReaderSession(
+        _ session: NFCTagReaderSession,
+        didDetect tags: [NFCTag]
+    ) {
         let msgReadingHeader = "読み取り中\n"
         print("reader session thread: \(Thread.current)")
         let tag = tags.first!

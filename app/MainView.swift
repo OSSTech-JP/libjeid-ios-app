@@ -36,7 +36,8 @@ class MainView: UIView {
         pinButton = CustomViewUtil.createButton(UIScreen.main.bounds.size)
         pinButton.setTitle("暗証番号ステータス", for: .normal)
 
-        let stackView = CustomViewUtil.createVerticalStackView(UIScreen.main.bounds.size)
+        let stackView = CustomViewUtil.createVerticalStackView(
+            UIScreen.main.bounds.size)
         stackView.addArrangedSubview(inButton)
         stackView.addArrangedSubview(dlButton)
         stackView.addArrangedSubview(epButton)
@@ -46,8 +47,11 @@ class MainView: UIView {
         super.init(frame: .zero)
         self.addSubview(stackView)
         stackView.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
-        stackView.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
-        stackView.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
-        stackView.widthAnchor.constraint(equalTo: self.widthAnchor).isActive = true
+        stackView.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive =
+            true
+        stackView.centerXAnchor.constraint(equalTo: self.centerXAnchor)
+            .isActive = true
+        stackView.widthAnchor.constraint(equalTo: self.widthAnchor).isActive =
+            true
     }
 }

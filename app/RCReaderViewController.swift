@@ -10,7 +10,8 @@ import CoreNFC
 import UIKit
 import libjeid
 
-class RCReaderViewController: WrapperViewController, NFCTagReaderSessionDelegate {
+class RCReaderViewController: WrapperViewController, NFCTagReaderSessionDelegate
+{
     let MAX_NUMBER_LENGTH: Int = 12
     var rcReaderView: RCReaderView!
     var numberField: UITextField!
@@ -22,38 +23,44 @@ class RCReaderViewController: WrapperViewController, NFCTagReaderSessionDelegate
         rcReaderView = RCReaderView()
         numberField = rcReaderView.numberField
         numberField.delegate = self
-        rcReaderView.startButton.addTarget(self, action: #selector(pushStartButton), for: .touchUpInside)
+        rcReaderView.startButton.addTarget(
+            self, action: #selector(pushStartButton), for: .touchUpInside)
 
         let wrapperView = WrapperView(rcReaderView)
         wrapperView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         self.view = wrapperView
     }
 
-    @objc func pushStartButton(sender: UIButton){
+    @objc func pushStartButton(sender: UIButton) {
         self.number = self.numberField!.text
         if let activeField = self.activeField {
             activeField.resignFirstResponder()
         }
-        if (!NFCReaderSession.readingAvailable) {
+        if !NFCReaderSession.readingAvailable {
             self.openAlertView("エラー", "お使いの端末はNFCに対応していません。")
             return
         }
         self.clearPublishedLog()
-        if let _ = self.session {
+        if self.session != nil {
             publishLog("しばらく待ってから再度お試しください")
         } else {
-            self.session = NFCTagReaderSession(pollingOption: [.iso14443], delegate: self, queue: DispatchQueue.global())
+            self.session = NFCTagReaderSession(
+                pollingOption: [.iso14443], delegate: self,
+                queue: DispatchQueue.global())
             self.session?.alertMessage = "カードに端末をかざしてください"
             self.session?.begin()
             self.rcReaderView.startButton.alpha = Self.INACTIVE_ALPHA
         }
     }
 
-    func textField(_ textField: UITextField,
-                   shouldChangeCharactersIn range: NSRange,
-                   replacementString string: String) -> Bool {
+    func textField(
+        _ textField: UITextField,
+        shouldChangeCharactersIn range: NSRange,
+        replacementString string: String
+    ) -> Bool {
         let currentStr: NSString = textField.text! as NSString
-        let newStr: NSString = currentStr.replacingCharacters(in: range, with: string) as NSString
+        let newStr: NSString =
+            currentStr.replacingCharacters(in: range, with: string) as NSString
         return newStr.length <= MAX_NUMBER_LENGTH
     }
 
@@ -61,13 +68,18 @@ class RCReaderViewController: WrapperViewController, NFCTagReaderSessionDelegate
         print("tagReaderSessionDidBecomeActive: \(Thread.current)")
     }
 
-    func tagReaderSession(_ session: NFCTagReaderSession,
-                          didInvalidateWithError error: Error) {
+    func tagReaderSession(
+        _ session: NFCTagReaderSession,
+        didInvalidateWithError error: Error
+    ) {
         if let nfcError = error as? NFCReaderError {
             if nfcError.code != .readerSessionInvalidationErrorUserCanceled {
-                print("tagReaderSession error: " + nfcError.localizedDescription)
+                print(
+                    "tagReaderSession error: " + nfcError.localizedDescription)
                 self.publishLog("エラー: " + nfcError.localizedDescription)
-                if nfcError.code == .readerSessionInvalidationErrorSessionTerminatedUnexpectedly {
+                if nfcError.code
+                    == .readerSessionInvalidationErrorSessionTerminatedUnexpectedly
+                {
                     self.publishLog("しばらく待ってから再度お試しください")
                 }
             }
@@ -80,8 +92,10 @@ class RCReaderViewController: WrapperViewController, NFCTagReaderSessionDelegate
         }
     }
 
-    func tagReaderSession(_ session: NFCTagReaderSession,
-                          didDetect tags: [NFCTag]) {
+    func tagReaderSession(
+        _ session: NFCTagReaderSession,
+        didDetect tags: [NFCTag]
+    ) {
         let msgReadingHeader = "読み取り中\n"
         let msgErrorHeader = "エラー\n"
         print("reader session thread: \(Thread.current)")
@@ -98,9 +112,10 @@ class RCReaderViewController: WrapperViewController, NFCTagReaderSessionDelegate
                 self.clearPublishedLog()
                 session.alertMessage = "読み取り開始..."
                 let type = try reader.detectCardType()
-                if (type != CardType.RC) {
+                if type != CardType.RC {
                     self.publishLog("在留カード/特別永住者証明書ではありません")
-                    session.invalidate(errorMessage: "\(msgErrorHeader)在留カード/特別永住者証明書ではありません")
+                    session.invalidate(
+                        errorMessage: "\(msgErrorHeader)在留カード/特別永住者証明書ではありません")
                     return
                 }
                 self.publishLog("# 在留カードの読み取り開始")
@@ -116,10 +131,11 @@ class RCReaderViewController: WrapperViewController, NFCTagReaderSessionDelegate
                 let cardType = try freeFiles.getCardType()
                 self.publishLog("## カード種別")
                 self.publishLog(cardType.description)
-                
-                if (self.number == nil || self.number!.isEmpty) {
+
+                if self.number == nil || self.number!.isEmpty {
                     self.publishLog("在留カード番号または特別永住者証明書番号を入力してください")
-                    session.invalidate(errorMessage: "\(msgErrorHeader)在留カード等の番号が入力されていません")
+                    session.invalidate(
+                        errorMessage: "\(msgErrorHeader)在留カード等の番号が入力されていません")
                     return
                 }
                 do {
@@ -132,7 +148,8 @@ class RCReaderViewController: WrapperViewController, NFCTagReaderSessionDelegate
                 } catch let jeidError as JeidError {
                     switch jeidError {
                     case .invalidKey:
-                        session.invalidate(errorMessage: "\(msgErrorHeader)認証失敗")
+                        session.invalidate(
+                            errorMessage: "\(msgErrorHeader)認証失敗")
                         self.publishLog("失敗\n")
                         self.handleInvalidKeyError(jeidError)
                         return
@@ -145,17 +162,19 @@ class RCReaderViewController: WrapperViewController, NFCTagReaderSessionDelegate
                 let files = try ap.readFiles()
                 session.alertMessage += "成功"
 
-                var dataDict = Dictionary<String, Any>()
+                var dataDict = [String: Any]()
                 if let type = cardType.type {
                     dataDict["rc-card-type"] = type
                 }
                 let cardEntries = try files.getCardEntries()
                 let entriesImage = try cardEntries.pngData()
-                let src = "data:image/png;base64,\(entriesImage.base64EncodedString())"
+                let src =
+                    "data:image/png;base64,\(entriesImage.base64EncodedString())"
                 dataDict["rc-front-image"] = src
                 let photo = try files.getPhoto()
                 if let photoImage = photo.photoData {
-                    let src = "data:image/jp2;base64,\(photoImage.base64EncodedString())"
+                    let src =
+                        "data:image/jp2;base64,\(photoImage.base64EncodedString())"
                     dataDict["rc-photo"] = src
                 }
 
@@ -165,10 +184,12 @@ class RCReaderViewController: WrapperViewController, NFCTagReaderSessionDelegate
 
                 // カード種別が在留カードの場合
                 if cardType.type == "1" {
-                    let comprehensivePermission = try files.getComprehensivePermission()
+                    let comprehensivePermission =
+                        try files.getComprehensivePermission()
                     self.publishLog("## 裏面資格外活動包括許可欄")
                     self.publishLog(comprehensivePermission.description)
-                    let individualPermission = try files.getIndividualPermission()
+                    let individualPermission =
+                        try files.getIndividualPermission()
                     self.publishLog("## 裏面資格外活動個別許可欄")
                     self.publishLog(individualPermission.description)
                     let updateStatus = try files.getUpdateStatus()
@@ -201,18 +222,25 @@ class RCReaderViewController: WrapperViewController, NFCTagReaderSessionDelegate
         }
     }
 
-    func openWebView(_ dict: Dictionary<String, Any>) {
+    func openWebView(_ dict: [String: Any]) {
         DispatchQueue.main.async {
             do {
-                let jsonData: Data = try JSONSerialization.data(withJSONObject: dict, options: [])
+                let jsonData: Data = try JSONSerialization.data(
+                    withJSONObject: dict, options: [])
                 var jsonStr: String? = String(bytes: jsonData, encoding: .utf8)
-                jsonStr = jsonStr?.replacingOccurrences(of: "\\\"", with: "\\\\\"")
+                jsonStr = jsonStr?.replacingOccurrences(
+                    of: "\\\"", with: "\\\\\"")
 
-                let path = Bundle.main.path(forResource: "rc", ofType: "html", inDirectory: "WebAssets/rc")!
-                let localHtmlUrl = URL(fileURLWithPath: path, isDirectory: false)
-                let webViewController = WebViewController(localHtmlUrl, "render(\'\(jsonStr!)\');")
+                let path = Bundle.main.path(
+                    forResource: "rc", ofType: "html",
+                    inDirectory: "WebAssets/rc")!
+                let localHtmlUrl = URL(
+                    fileURLWithPath: path, isDirectory: false)
+                let webViewController = WebViewController(
+                    localHtmlUrl, "render(\'\(jsonStr!)\');")
                 webViewController.title = "在留カードビューア"
-                self.navigationController?.pushViewController(webViewController, animated: true)
+                self.navigationController?.pushViewController(
+                    webViewController, animated: true)
             } catch (let error) {
                 self.publishLog("\(error)")
                 self.openAlertView("エラー", "読み取り結果の表示に失敗しました")

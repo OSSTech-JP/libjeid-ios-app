@@ -16,15 +16,18 @@ class PinStatusView: UIView {
     }
 
     init() {
-        let explanation = CustomViewUtil.createTextView(UIScreen.main.bounds.size)
-        explanation.text = "暗証番号ステータスを表示します。\n"
-                         + "運転免許証およびマイナンバーカードに対応しています。\n"
-                         + "読み取り開始ボタンを押下後、端末をカードにかざしてください。"
+        let explanation = CustomViewUtil.createTextView(
+            UIScreen.main.bounds.size)
+        explanation.text =
+            "暗証番号ステータスを表示します。\n"
+            + "運転免許証およびマイナンバーカードに対応しています。\n"
+            + "読み取り開始ボタンを押下後、端末をカードにかざしてください。"
 
         startButton = CustomViewUtil.createButton(UIScreen.main.bounds.size)
         startButton.setTitle("読み取り開始", for: .normal)
 
-        let stackView = CustomViewUtil.createVerticalStackView(UIScreen.main.bounds.size)
+        let stackView = CustomViewUtil.createVerticalStackView(
+            UIScreen.main.bounds.size)
         stackView.addArrangedSubview(explanation)
         stackView.addArrangedSubview(startButton)
 
@@ -32,8 +35,11 @@ class PinStatusView: UIView {
         self.addSubview(stackView)
 
         stackView.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
-        stackView.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
-        stackView.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
-        stackView.widthAnchor.constraint(equalTo: self.widthAnchor).isActive = true
+        stackView.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive =
+            true
+        stackView.centerXAnchor.constraint(equalTo: self.centerXAnchor)
+            .isActive = true
+        stackView.widthAnchor.constraint(equalTo: self.widthAnchor).isActive =
+            true
     }
 }

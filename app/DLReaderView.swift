@@ -18,9 +18,11 @@ class DLReaderView: UIView {
     }
 
     init() {
-        let explanation = CustomViewUtil.createTextView(UIScreen.main.bounds.size)
-        explanation.text = "読み取り開始ボタンを押下後、端末を免許証にかざしてください。\n"
-                           + "暗証番号2は省略可能です。その場合、顔写真および本籍は表示されません。"
+        let explanation = CustomViewUtil.createTextView(
+            UIScreen.main.bounds.size)
+        explanation.text =
+            "読み取り開始ボタンを押下後、端末を免許証にかざしてください。\n"
+            + "暗証番号2は省略可能です。その場合、顔写真および本籍は表示されません。"
 
         let pin1Label = CustomViewUtil.createTextView(UIScreen.main.bounds.size)
         pin1Label.text = "暗証番号1(4桁、必須)"
@@ -35,18 +37,21 @@ class DLReaderView: UIView {
         pin2Field.isSecureTextEntry = true
         pin2Field.keyboardType = UIKeyboardType.numberPad
 
-        let pin1StackView = CustomViewUtil.createNarrowVerticalStackView(UIScreen.main.bounds.size)
+        let pin1StackView = CustomViewUtil.createNarrowVerticalStackView(
+            UIScreen.main.bounds.size)
         pin1StackView.addArrangedSubview(pin1Label)
         pin1StackView.addArrangedSubview(pin1Field)
 
-        let pin2StackView = CustomViewUtil.createNarrowVerticalStackView(UIScreen.main.bounds.size)
+        let pin2StackView = CustomViewUtil.createNarrowVerticalStackView(
+            UIScreen.main.bounds.size)
         pin2StackView.addArrangedSubview(pin2Label)
         pin2StackView.addArrangedSubview(pin2Field)
 
         startButton = CustomViewUtil.createButton(UIScreen.main.bounds.size)
         startButton.setTitle("読み取り開始", for: .normal)
 
-        let stackView = CustomViewUtil.createVerticalStackView(UIScreen.main.bounds.size)
+        let stackView = CustomViewUtil.createVerticalStackView(
+            UIScreen.main.bounds.size)
         stackView.addArrangedSubview(explanation)
         stackView.addArrangedSubview(pin1StackView)
         stackView.addArrangedSubview(pin2StackView)
@@ -56,14 +61,21 @@ class DLReaderView: UIView {
         self.addSubview(stackView)
 
         stackView.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
-        stackView.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
-        stackView.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
-        stackView.widthAnchor.constraint(equalTo: self.widthAnchor).isActive = true
+        stackView.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive =
+            true
+        stackView.centerXAnchor.constraint(equalTo: self.centerXAnchor)
+            .isActive = true
+        stackView.widthAnchor.constraint(equalTo: self.widthAnchor).isActive =
+            true
     }
 
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+    override func traitCollectionDidChange(
+        _ previousTraitCollection: UITraitCollection?
+    ) {
         super.traitCollectionDidChange(previousTraitCollection)
-        if (previousTraitCollection!.hasDifferentColorAppearance(comparedTo: traitCollection)) {
+        if previousTraitCollection!.hasDifferentColorAppearance(
+            comparedTo: traitCollection)
+        {
             pin1Field.layer.borderColor = CustomColor.textFieldBorder.cgColor
             pin2Field.layer.borderColor = CustomColor.textFieldBorder.cgColor
         }

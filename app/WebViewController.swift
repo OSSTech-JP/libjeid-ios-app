@@ -32,7 +32,8 @@ class WebViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
         let screenHeight = UIScreen.main.bounds.size.height
         let paddingSize = CGFloat(min(screenWidth, screenHeight) / 50)
 
-        webview = WKWebView(frame: view.bounds, configuration: WKWebViewConfiguration())
+        webview = WKWebView(
+            frame: view.bounds, configuration: WKWebViewConfiguration())
         view.backgroundColor = UIColor.white
         webview.uiDelegate = self
         webview.navigationDelegate = self
@@ -40,27 +41,42 @@ class WebViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
         view.addSubview(webview)
 
         webview.translatesAutoresizingMaskIntoConstraints = false
-        webview.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor,
-                                     constant: paddingSize).isActive = true
-        webview.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor,
-                                         constant: paddingSize).isActive = true
-        webview.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor,
-                                          constant: paddingSize * -1).isActive = true
-        webview.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor,
-                                        constant: paddingSize * -1).isActive = true
+        webview.topAnchor.constraint(
+            equalTo: self.view.safeAreaLayoutGuide.topAnchor,
+            constant: paddingSize
+        ).isActive = true
+        webview.leadingAnchor.constraint(
+            equalTo: self.view.safeAreaLayoutGuide.leadingAnchor,
+            constant: paddingSize
+        ).isActive = true
+        webview.trailingAnchor.constraint(
+            equalTo: self.view.safeAreaLayoutGuide.trailingAnchor,
+            constant: paddingSize * -1
+        ).isActive = true
+        webview.bottomAnchor.constraint(
+            equalTo: self.view.safeAreaLayoutGuide.bottomAnchor,
+            constant: paddingSize * -1
+        ).isActive = true
 
         webview.load(URLRequest(url: url))
 
-        navigationItem.rightBarButtonItem
-            = UIBarButtonItem(title: "︙", style: .done, target: self, action: #selector(pushThreeDotLeaders))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+            title: "︙", style: .done, target: self,
+            action: #selector(pushThreeDotLeaders))
     }
 
-    func webView(_ webView: WKWebView,
-                 runJavaScriptAlertPanelWithMessage message: String,
-                 initiatedByFrame frame: WKFrameInfo,
-                 completionHandler: @escaping () -> Void) {
-        let alertController = UIAlertController(title: nil, message: message, preferredStyle: UIAlertController.Style.alert)
-        let alertAction = UIAlertAction(title: "OK", style: UIAlertAction.Style.default) { (action: UIAlertAction) -> Void in
+    func webView(
+        _ webView: WKWebView,
+        runJavaScriptAlertPanelWithMessage message: String,
+        initiatedByFrame frame: WKFrameInfo,
+        completionHandler: @escaping () -> Void
+    ) {
+        let alertController = UIAlertController(
+            title: nil, message: message,
+            preferredStyle: UIAlertController.Style.alert)
+        let alertAction = UIAlertAction(
+            title: "OK", style: UIAlertAction.Style.default
+        ) { (action: UIAlertAction) -> Void in
             alertController.dismiss(animated: true, completion: nil)
         }
         alertController.addAction(alertAction)
@@ -84,6 +100,7 @@ class WebViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
         optionsMenuViewController.closeHandler = { viewController in
             viewController.dismiss(animated: false, completion: nil)
         }
-        self.present(optionsMenuViewController, animated: false, completion: nil)
+        self.present(
+            optionsMenuViewController, animated: false, completion: nil)
     }
 }

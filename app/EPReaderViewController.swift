@@ -10,7 +10,8 @@ import CoreNFC
 import UIKit
 import libjeid
 
-class EPReaderViewController: WrapperViewController, NFCTagReaderSessionDelegate {
+class EPReaderViewController: WrapperViewController, NFCTagReaderSessionDelegate
+{
     let MAX_NUMBER_LENGTH: Int = 9
     let MAX_DATE_LENGTH: Int = 8
     var epReaderView: EPReaderView!
@@ -31,40 +32,46 @@ class EPReaderViewController: WrapperViewController, NFCTagReaderSessionDelegate
         birthDateField.delegate = self
         expireDateField = epReaderView.expireDateField
         expireDateField.delegate = self
-        epReaderView.startButton.addTarget(self, action: #selector(pushStartButton), for: .touchUpInside)
+        epReaderView.startButton.addTarget(
+            self, action: #selector(pushStartButton), for: .touchUpInside)
 
         let wrapperView = WrapperView(epReaderView)
         wrapperView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         self.view = wrapperView
     }
 
-    @objc func pushStartButton(sender: UIButton){
+    @objc func pushStartButton(sender: UIButton) {
         self.number = self.numberField!.text
         self.birthDate = self.birthDateField!.text
         self.expireDate = self.expireDateField!.text
         if let activeField = self.activeField {
             activeField.resignFirstResponder()
         }
-        if (!NFCReaderSession.readingAvailable) {
+        if !NFCReaderSession.readingAvailable {
             self.openAlertView("エラー", "お使いの端末はNFCに対応していません。")
             return
         }
         self.clearPublishedLog()
-        if let _ = self.session {
+        if self.session != nil {
             publishLog("しばらく待ってから再度お試しください")
         } else {
-            self.session = NFCTagReaderSession(pollingOption: [.iso14443], delegate: self, queue: DispatchQueue.global())
+            self.session = NFCTagReaderSession(
+                pollingOption: [.iso14443], delegate: self,
+                queue: DispatchQueue.global())
             self.session?.alertMessage = "パスポートに端末をかざしてください"
             self.session?.begin()
             self.epReaderView.startButton.alpha = Self.INACTIVE_ALPHA
         }
     }
 
-    func textField(_ textField: UITextField,
-                   shouldChangeCharactersIn range: NSRange,
-                   replacementString string: String) -> Bool {
+    func textField(
+        _ textField: UITextField,
+        shouldChangeCharactersIn range: NSRange,
+        replacementString string: String
+    ) -> Bool {
         let currentStr: NSString = textField.text! as NSString
-        let newStr: NSString = currentStr.replacingCharacters(in: range, with: string) as NSString
+        let newStr: NSString =
+            currentStr.replacingCharacters(in: range, with: string) as NSString
         if textField == self.numberField {
             return newStr.length <= MAX_NUMBER_LENGTH
         } else {
@@ -76,13 +83,18 @@ class EPReaderViewController: WrapperViewController, NFCTagReaderSessionDelegate
         print("tagReaderSessionDidBecomeActive: \(Thread.current)")
     }
 
-    func tagReaderSession(_ session: NFCTagReaderSession,
-                          didInvalidateWithError error: Error) {
+    func tagReaderSession(
+        _ session: NFCTagReaderSession,
+        didInvalidateWithError error: Error
+    ) {
         if let nfcError = error as? NFCReaderError {
             if nfcError.code != .readerSessionInvalidationErrorUserCanceled {
-                print("tagReaderSession error: " + nfcError.localizedDescription)
+                print(
+                    "tagReaderSession error: " + nfcError.localizedDescription)
                 self.publishLog("エラー: " + nfcError.localizedDescription)
-                if nfcError.code == .readerSessionInvalidationErrorSessionTerminatedUnexpectedly {
+                if nfcError.code
+                    == .readerSessionInvalidationErrorSessionTerminatedUnexpectedly
+                {
                     self.publishLog("しばらく待ってから再度お試しください")
                 }
             }
@@ -95,8 +107,10 @@ class EPReaderViewController: WrapperViewController, NFCTagReaderSessionDelegate
         }
     }
 
-    func tagReaderSession(_ session: NFCTagReaderSession,
-                          didDetect tags: [NFCTag]) {
+    func tagReaderSession(
+        _ session: NFCTagReaderSession,
+        didDetect tags: [NFCTag]
+    ) {
         let msgReadingHeader = "読み取り中\n"
         let msgErrorHeader = "エラー\n"
         print("reader session thread: \(Thread.current)")
@@ -113,50 +127,66 @@ class EPReaderViewController: WrapperViewController, NFCTagReaderSessionDelegate
                 self.clearPublishedLog()
                 session.alertMessage = "読み取り開始..."
                 let type = try reader.detectCardType()
-                if (type != CardType.EP) {
+                if type != CardType.EP {
                     self.publishLog("パスポートではありません")
-                    session.invalidate(errorMessage: "\(msgErrorHeader)パスポートではありません")
+                    session.invalidate(
+                        errorMessage: "\(msgErrorHeader)パスポートではありません")
                     return
                 }
                 self.publishLog("# パスポートの読み取り開始")
                 print("thread: \(Thread.current)")
                 let ap = try reader.selectEP()
-                if (self.number == nil || self.number!.isEmpty) {
+                if self.number == nil || self.number!.isEmpty {
                     self.publishLog("パスポート番号を入力してください")
-                    session.invalidate(errorMessage: "\(msgErrorHeader)パスポート番号が入力されていません")
+                    session.invalidate(
+                        errorMessage: "\(msgErrorHeader)パスポート番号が入力されていません")
                     return
                 }
-                if (self.number!.count != self.MAX_NUMBER_LENGTH) {
+                if self.number!.count != self.MAX_NUMBER_LENGTH {
                     self.publishLog("パスポート番号が9文字ではありません")
-                    session.invalidate(errorMessage: "\(msgErrorHeader)パスポート番号が9文字ではありません")
+                    session.invalidate(
+                        errorMessage: "\(msgErrorHeader)パスポート番号が9文字ではありません")
                     return
                 }
-                if (self.birthDate == nil || self.birthDate!.isEmpty) {
+                if self.birthDate == nil || self.birthDate!.isEmpty {
                     self.publishLog("生年月日を入力してください")
-                    session.invalidate(errorMessage: "\(msgErrorHeader)生年月日が入力されていません")
+                    session.invalidate(
+                        errorMessage: "\(msgErrorHeader)生年月日が入力されていません")
                     return
                 }
                 let birthDate = self.birthDate!
-                if (birthDate.count != self.MAX_DATE_LENGTH) {
+                if birthDate.count != self.MAX_DATE_LENGTH {
                     self.publishLog("生年月日が8桁ではありません")
-                    session.invalidate(errorMessage: "\(msgErrorHeader)生年月日が8桁ではありません")
+                    session.invalidate(
+                        errorMessage: "\(msgErrorHeader)生年月日が8桁ではありません")
                     return
                 }
-                if (self.expireDate == nil || self.expireDate!.isEmpty) {
+                if self.expireDate == nil || self.expireDate!.isEmpty {
                     self.publishLog("有効期限を入力してください")
-                    session.invalidate(errorMessage: "\(msgErrorHeader)有効期限が入力されていません")
+                    session.invalidate(
+                        errorMessage: "\(msgErrorHeader)有効期限が入力されていません")
                     return
                 }
                 let expireDate = self.expireDate!
-                if (expireDate.count != self.MAX_DATE_LENGTH) {
+                if expireDate.count != self.MAX_DATE_LENGTH {
                     self.publishLog("有効期限が8桁ではありません")
-                    session.invalidate(errorMessage: "\(msgErrorHeader)有効期限が8桁ではありません")
+                    session.invalidate(
+                        errorMessage: "\(msgErrorHeader)有効期限が8桁ではありません")
                     return
                 }
                 do {
-                    let epKey = try EPKey(self.number!,
-                                          String(birthDate[birthDate.index(birthDate.startIndex, offsetBy: 2)..<birthDate.endIndex]),
-                                          String(expireDate[expireDate.index(expireDate.startIndex, offsetBy: 2)..<expireDate.endIndex]))
+                    let epKey = try EPKey(
+                        self.number!,
+                        String(
+                            birthDate[
+                                birthDate.index(
+                                    birthDate.startIndex, offsetBy: 2)..<birthDate
+                                    .endIndex]),
+                        String(
+                            expireDate[
+                                expireDate.index(
+                                    expireDate.startIndex, offsetBy: 2)..<expireDate
+                                    .endIndex]))
                     session.alertMessage = "\(msgReadingHeader)BAC開始..."
                     self.publishLog("## Basic Access Control開始")
                     try ap.startBAC(epKey)
@@ -165,7 +195,8 @@ class EPReaderViewController: WrapperViewController, NFCTagReaderSessionDelegate
                 } catch let jeidError as JeidError {
                     switch jeidError {
                     case .invalidKey:
-                        session.invalidate(errorMessage: "\(msgErrorHeader)BAC失敗")
+                        session.invalidate(
+                            errorMessage: "\(msgErrorHeader)BAC失敗")
                         self.publishLog("パスポート番号、生年月日または有効期限が間違っています\n")
                         self.handleInvalidKeyError(jeidError)
                         return
@@ -180,7 +211,7 @@ class EPReaderViewController: WrapperViewController, NFCTagReaderSessionDelegate
                 self.publishLog("## 読み取りに成功したファイル")
                 self.publishLog("\(files)\n")
 
-                var dataDict = Dictionary<String, Any>()
+                var dataDict = [String: Any]()
                 let commonData = try files.getCommonData()
                 self.publishLog("## Common Data")
                 self.publishLog(commonData.description)
@@ -206,7 +237,8 @@ class EPReaderViewController: WrapperViewController, NFCTagReaderSessionDelegate
 
                 let dg2 = try files.getDataGroup2()
                 if let jpeg = dg2.faceJpeg {
-                    let src = "data:image/jpeg;base64,\(jpeg.base64EncodedString())"
+                    let src =
+                        "data:image/jpeg;base64,\(jpeg.base64EncodedString())"
                     dataDict["ep-photo"] = src
                 }
 
@@ -219,10 +251,12 @@ class EPReaderViewController: WrapperViewController, NFCTagReaderSessionDelegate
                     self.publishLog("検証結果: \(paResult.isValid)\n")
                 } catch JeidError.unsupportedOperation {
                     // 無償版の場合、EPFiles#validate()でJeidError.unsupportedOperationが返ります
-                    self.publishLog("無償版ライブラリはPassive Authenticationをサポートしません\n")
+                    self.publishLog(
+                        "無償版ライブラリはPassive Authenticationをサポートしません\n")
                 }
 
-                session.alertMessage = "\(msgReadingHeader)Active Authentication..."
+                session.alertMessage =
+                    "\(msgReadingHeader)Active Authentication..."
                 self.publishLog("## Active Authentication")
                 do {
                     let aaResult = try ap.activeAuthentication(files)
@@ -232,18 +266,22 @@ class EPReaderViewController: WrapperViewController, NFCTagReaderSessionDelegate
                     switch jeidError {
                     case .unsupportedOperation:
                         // 無償版の場合、PassportAP#activeAuthentication(_:)でJeidError.unsupportedOperationが返ります
-                        self.publishLog("無償版ライブラリはActive Authenticationをサポートしません\n")
+                        self.publishLog(
+                            "無償版ライブラリはActive Authenticationをサポートしません\n")
                     case .fileNotFound:
                         self.publishLog("Active Authenticationに非対応なパスポートです\n")
                     case .transceiveFailed:
                         throw jeidError
                     default:
-                        self.publishLog("Active Authenticationで不明なエラーが発生しました: \(jeidError)\n")
+                        self.publishLog(
+                            "Active Authenticationで不明なエラーが発生しました: \(jeidError)\n"
+                        )
                     }
                 }
 
                 if "JPN" != issuingCountry {
-                    session.invalidate(errorMessage: "\(msgErrorHeader)日本発行のパスポートではありません")
+                    session.invalidate(
+                        errorMessage: "\(msgErrorHeader)日本発行のパスポートではありません")
                     self.publishLog("日本発行のパスポートではありません")
                     return
                 }
@@ -258,18 +296,25 @@ class EPReaderViewController: WrapperViewController, NFCTagReaderSessionDelegate
         }
     }
 
-    func openWebView(_ dict: Dictionary<String, Any>) {
+    func openWebView(_ dict: [String: Any]) {
         DispatchQueue.main.async {
             do {
-                let jsonData: Data = try JSONSerialization.data(withJSONObject: dict, options: [])
+                let jsonData: Data = try JSONSerialization.data(
+                    withJSONObject: dict, options: [])
                 var jsonStr: String? = String(bytes: jsonData, encoding: .utf8)
-                jsonStr = jsonStr?.replacingOccurrences(of: "\\\"", with: "\\\\\"")
+                jsonStr = jsonStr?.replacingOccurrences(
+                    of: "\\\"", with: "\\\\\"")
 
-                let path = Bundle.main.path(forResource: "ep", ofType: "html", inDirectory: "WebAssets/ep")!
-                let localHtmlUrl = URL(fileURLWithPath: path, isDirectory: false)
-                let webViewController = WebViewController(localHtmlUrl, "render(\'\(jsonStr!)\');")
+                let path = Bundle.main.path(
+                    forResource: "ep", ofType: "html",
+                    inDirectory: "WebAssets/ep")!
+                let localHtmlUrl = URL(
+                    fileURLWithPath: path, isDirectory: false)
+                let webViewController = WebViewController(
+                    localHtmlUrl, "render(\'\(jsonStr!)\');")
                 webViewController.title = "パスポートビューアー"
-                self.navigationController?.pushViewController(webViewController, animated: true)
+                self.navigationController?.pushViewController(
+                    webViewController, animated: true)
             } catch (let error) {
                 self.publishLog("\(error)")
                 self.openAlertView("エラー", "読み取り結果の表示に失敗しました")

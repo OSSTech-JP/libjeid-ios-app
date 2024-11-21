@@ -19,31 +19,37 @@ class CustomViewUtil: UIView {
     private static let AUTO_LAYOUT_PADDING_DENOMINATOR = CGFloat(20)
 
     static func createLargeTextFont(_ size: CGSize) -> UIFont {
-        let fontSize = CGFloat(min(size.width, size.height) / LARGE_TEXT_SIZE_DENOMINATOR)
+        let fontSize = CGFloat(
+            min(size.width, size.height) / LARGE_TEXT_SIZE_DENOMINATOR)
         return UIFont.systemFont(ofSize: fontSize)
     }
 
     static func createMediumTextFont(_ size: CGSize) -> UIFont {
-        let fontSize = CGFloat(min(size.width, size.height) / MEDIUM_TEXT_SIZE_DENOMINATOR)
+        let fontSize = CGFloat(
+            min(size.width, size.height) / MEDIUM_TEXT_SIZE_DENOMINATOR)
         return UIFont.systemFont(ofSize: fontSize)
     }
 
     static func createSmallTextFont(_ size: CGSize) -> UIFont {
-        let fontSize = CGFloat(min(size.width, size.height) / SMALL_TEXT_SIZE_DENOMINATOR)
+        let fontSize = CGFloat(
+            min(size.width, size.height) / SMALL_TEXT_SIZE_DENOMINATOR)
         return UIFont.systemFont(ofSize: fontSize)
     }
 
     static func getAutoLayoutPadding(_ size: CGSize) -> CGFloat {
-        return CGFloat(min(size.width, size.height) / AUTO_LAYOUT_PADDING_DENOMINATOR)
+        return CGFloat(
+            min(size.width, size.height) / AUTO_LAYOUT_PADDING_DENOMINATOR)
     }
 
     static func createButton(_ size: CGSize) -> UIButton {
         let button = CustomButton(type: .custom)
         button.backgroundColor = CustomColor.buttonBackground
-        button.highlightedBackgroundColor = CustomColor.buttonHighlightedBackground
+        button.highlightedBackgroundColor =
+            CustomColor.buttonHighlightedBackground
         button.setTitleColor(CustomColor.buttonTitle, for: .normal)
         button.setTitleColor(CustomColor.buttonTitle, for: .highlighted)
-        let fontSize = CGFloat(min(size.width, size.height) / BUTTON_LABEL_FONT_SIZE_DENOMINATOR)
+        let fontSize = CGFloat(
+            min(size.width, size.height) / BUTTON_LABEL_FONT_SIZE_DENOMINATOR)
         button.titleLabel?.font = UIFont.systemFont(ofSize: fontSize)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -52,14 +58,18 @@ class CustomViewUtil: UIView {
     static func createMenuItem(_ size: CGSize) -> UIButton {
         let button = CustomButton(type: .custom)
         button.backgroundColor = CustomColor.optionsMenuItemBackground
-        button.highlightedBackgroundColor = CustomColor.menuItemHighlightedBackground
+        button.highlightedBackgroundColor =
+            CustomColor.menuItemHighlightedBackground
         button.setTitleColor(CustomColor.optionsMenuItemTitle, for: .normal)
-        button.setTitleColor(CustomColor.optionsMenuItemTitle, for: .highlighted)
-        let fontSize = CGFloat(min(size.width, size.height) / SMALL_TEXT_SIZE_DENOMINATOR)
+        button.setTitleColor(
+            CustomColor.optionsMenuItemTitle, for: .highlighted)
+        let fontSize = CGFloat(
+            min(size.width, size.height) / SMALL_TEXT_SIZE_DENOMINATOR)
         button.titleLabel?.font = UIFont.systemFont(ofSize: fontSize)
         button.contentHorizontalAlignment = .left
-        button.contentEdgeInsets = UIEdgeInsets(top: fontSize * 0.75, left: fontSize * 0.75,
-                                                bottom: fontSize * 0.75, right: fontSize * 0.75)
+        button.contentEdgeInsets = UIEdgeInsets(
+            top: fontSize * 0.75, left: fontSize * 0.75,
+            bottom: fontSize * 0.75, right: fontSize * 0.75)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }
@@ -80,7 +90,8 @@ class CustomViewUtil: UIView {
         stackView.axis = .vertical
         stackView.alignment = .fill
         stackView.distribution = .fill
-        let spacing = CGFloat(min(size.width, size.height) / STACK_VIEW_WIDE_SPACING_DENOMINATOR)
+        let spacing = CGFloat(
+            min(size.width, size.height) / STACK_VIEW_WIDE_SPACING_DENOMINATOR)
         stackView.spacing = spacing
         stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
@@ -88,7 +99,9 @@ class CustomViewUtil: UIView {
 
     static func createNarrowVerticalStackView(_ size: CGSize) -> UIStackView {
         let stackView = createVerticalStackView(size)
-        let spacing = CGFloat(min(size.width, size.height) / STACK_VIEW_NARROW_SPACING_DENOMINATOR)
+        let spacing = CGFloat(
+            min(size.width, size.height) / STACK_VIEW_NARROW_SPACING_DENOMINATOR
+        )
         stackView.spacing = spacing
         return stackView
     }
@@ -108,9 +121,13 @@ class CustomViewUtil: UIView {
         textField.layer.borderColor = CustomColor.textFieldBorder.cgColor
         textField.layer.borderWidth = 1
         textField.translatesAutoresizingMaskIntoConstraints = false
-        let textFieldHeight = CGFloat(min(size.width, size.height) / TEXT_FIELD_HEIGHT_DENOMINATOR)
-        textField.heightAnchor.constraint(equalToConstant: CGFloat(textFieldHeight + textField.layer.borderWidth * 2))
-            .isActive = true
+        let textFieldHeight = CGFloat(
+            min(size.width, size.height) / TEXT_FIELD_HEIGHT_DENOMINATOR)
+        textField.heightAnchor.constraint(
+            equalToConstant: CGFloat(
+                textFieldHeight + textField.layer.borderWidth * 2)
+        )
+        .isActive = true
         return textField
     }
 

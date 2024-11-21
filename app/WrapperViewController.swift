@@ -6,9 +6,9 @@
 //  All rights reserved.
 //
 
-import UIKit
 import ImageIO
 import MobileCoreServices
+import UIKit
 
 class WrapperViewController: UIViewController, UITextFieldDelegate {
     var logView: UITextView?
@@ -30,9 +30,11 @@ class WrapperViewController: UIViewController, UITextFieldDelegate {
             logView = wrapperView.logView
             logFont = wrapperView.logView.font
         }
-        largeLogFont = CustomViewUtil.createMediumTextFont(UIScreen.main.bounds.size)
-        navigationItem.rightBarButtonItem
-            = UIBarButtonItem(title: "︙", style: .done, target: self, action: #selector(pushThreeDotLeaders))
+        largeLogFont = CustomViewUtil.createMediumTextFont(
+            UIScreen.main.bounds.size)
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+            title: "︙", style: .done, target: self,
+            action: #selector(pushThreeDotLeaders))
     }
 
     func textFieldDidBeginEditing(_ textField: UITextField) {
@@ -47,15 +49,18 @@ class WrapperViewController: UIViewController, UITextFieldDelegate {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         let notificationCenter = NotificationCenter.default
-        notificationCenter.addObserver(self,
-                                       selector: #selector(keyboardWillShow(_:)),
-                                       name: UIResponder.keyboardWillShowNotification, object: nil)
-        notificationCenter.addObserver(self,
-                                       selector: #selector(keyboardDidShow(_:)),
-                                       name: UIResponder.keyboardDidShowNotification, object: nil)
-        notificationCenter.addObserver(self,
-                                       selector: #selector(keyboardWillHide(_:)),
-                                       name: UIResponder.keyboardWillHideNotification, object: nil)
+        notificationCenter.addObserver(
+            self,
+            selector: #selector(keyboardWillShow(_:)),
+            name: UIResponder.keyboardWillShowNotification, object: nil)
+        notificationCenter.addObserver(
+            self,
+            selector: #selector(keyboardDidShow(_:)),
+            name: UIResponder.keyboardDidShowNotification, object: nil)
+        notificationCenter.addObserver(
+            self,
+            selector: #selector(keyboardWillHide(_:)),
+            name: UIResponder.keyboardWillHideNotification, object: nil)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -68,7 +73,9 @@ class WrapperViewController: UIViewController, UITextFieldDelegate {
         if hasResized {
             return
         }
-        let keyboardHeight = (notification?.userInfo![UIResponder.keyboardFrameEndUserInfoKey] as! NSValue).cgRectValue.size.height
+        let keyboardHeight =
+            (notification?.userInfo![UIResponder.keyboardFrameEndUserInfoKey]
+            as! NSValue).cgRectValue.size.height
         resizeScrollView(keyboardHeight)
         hasResized = true
         previousKeyboardHeight = keyboardHeight
@@ -76,7 +83,9 @@ class WrapperViewController: UIViewController, UITextFieldDelegate {
     }
 
     @objc func keyboardDidShow(_ notification: Notification?) {
-        let keyboardHeight = (notification?.userInfo![UIResponder.keyboardFrameEndUserInfoKey] as! NSValue).cgRectValue.size.height
+        let keyboardHeight =
+            (notification?.userInfo![UIResponder.keyboardFrameEndUserInfoKey]
+            as! NSValue).cgRectValue.size.height
         if keyboardHeight != previousKeyboardHeight {
             // keyboardWillShowの時点でキーボードの高さが正常に取得できなかった場合、ここで再度リサイズする
             resizeScrollView(keyboardHeight)
@@ -93,7 +102,10 @@ class WrapperViewController: UIViewController, UITextFieldDelegate {
             }
         }
         if hasResized {
-            let keyboardHeight = (notification?.userInfo![UIResponder.keyboardFrameEndUserInfoKey] as! NSValue).cgRectValue.size.height
+            let keyboardHeight =
+                (notification?.userInfo![
+                    UIResponder.keyboardFrameEndUserInfoKey] as! NSValue)
+                .cgRectValue.size.height
             undoResizing(keyboardHeight)
             hasResized = false
         }
@@ -133,9 +145,10 @@ class WrapperViewController: UIViewController, UITextFieldDelegate {
 
     func openAlertView(_ title: String, _ message: String) {
         DispatchQueue.main.async {
-            let alertController: UIAlertController
-                = UIAlertController(title: title, message: message, preferredStyle: .alert)
-            let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+            let alertController: UIAlertController = UIAlertController(
+                title: title, message: message, preferredStyle: .alert)
+            let okAction = UIAlertAction(
+                title: "OK", style: .default, handler: nil)
             alertController.addAction(okAction)
             self.present(alertController, animated: true, completion: nil)
         }
@@ -143,15 +156,19 @@ class WrapperViewController: UIViewController, UITextFieldDelegate {
 
     private func resizeScrollView(_ keyboardHeight: CGFloat) {
         if let activeField = activeField,
-            let scrollView = self.scrollView {
-            let fieldBottom = (scrollView.frame.origin.y + getActiveFieldOriginY(activeField) - scrollView.contentOffset.y)
+            let scrollView = self.scrollView
+        {
+            let fieldBottom =
+                (scrollView.frame.origin.y + getActiveFieldOriginY(activeField)
+                    - scrollView.contentOffset.y)
                 + activeField.frame.height
             let margin = activeField.frame.height * 0.5
             let keyboardTop = UIScreen.main.bounds.size.height - keyboardHeight
             if fieldBottom + margin >= keyboardTop {
                 scrollView.contentOffset.y += fieldBottom + margin - keyboardTop
             }
-            scrollView.contentSize.height += keyboardHeight - previousKeyboardHeight
+            scrollView.contentSize.height +=
+                keyboardHeight - previousKeyboardHeight
         }
     }
 
@@ -164,7 +181,7 @@ class WrapperViewController: UIViewController, UITextFieldDelegate {
     private func getActiveFieldOriginY(_ textField: UITextField) -> CGFloat {
         var originY = CGFloat(0)
         var view: UIView = textField
-        while(!view.isEqual(scrollView)) {
+        while !view.isEqual(scrollView) {
             originY += view.frame.origin.y
             guard let superview = view.superview else {
                 return originY
@@ -180,18 +197,24 @@ class WrapperViewController: UIViewController, UITextFieldDelegate {
         optionsMenuViewController.closeHandler = { viewController in
             viewController.dismiss(animated: false, completion: nil)
         }
-        self.present(optionsMenuViewController, animated: false, completion: nil)
+        self.present(
+            optionsMenuViewController, animated: false, completion: nil)
     }
 
     // CGImageオブジェクトをJpeg形式に変換
     func encodeJpeg(_ image: CGImage) throws -> Data? {
         let jpegData = NSMutableData()
-        guard let destination = CGImageDestinationCreateWithData(jpegData, kUTTypeJPEG, 1, nil) else {
+        guard
+            let destination = CGImageDestinationCreateWithData(
+                jpegData, kUTTypeJPEG, 1, nil)
+        else {
             return nil
         }
-        let options: [CFString: Any] = [kCGImageDestinationLossyCompressionQuality: 0.9]
+        let options: [CFString: Any] = [
+            kCGImageDestinationLossyCompressionQuality: 0.9
+        ]
         CGImageDestinationAddImage(destination, image, options as CFDictionary)
-        
+
         if CGImageDestinationFinalize(destination) {
             return jpegData as Data
         } else {

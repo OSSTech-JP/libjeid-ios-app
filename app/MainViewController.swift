@@ -12,14 +12,20 @@ class MainViewController: WrapperViewController {
     var mainView: MainView!
 
     override func loadView() {
-        let bundleName = Bundle.main.object(forInfoDictionaryKey: "CFBundleName") as! String
+        let bundleName =
+            Bundle.main.object(forInfoDictionaryKey: "CFBundleName") as! String
         self.title = bundleName
         mainView = MainView()
-        mainView.inButton.addTarget(self, action: #selector(pushInButton), for: .touchUpInside)
-        mainView.dlButton.addTarget(self, action: #selector(pushDlButton), for: .touchUpInside)
-        mainView.epButton.addTarget(self, action: #selector(pushEpButton), for: .touchUpInside)
-        mainView.rcButton.addTarget(self, action: #selector(pushRcButton), for: .touchUpInside)
-        mainView.pinButton.addTarget(self, action: #selector(pushPinButton), for: .touchUpInside)
+        mainView.inButton.addTarget(
+            self, action: #selector(pushInButton), for: .touchUpInside)
+        mainView.dlButton.addTarget(
+            self, action: #selector(pushDlButton), for: .touchUpInside)
+        mainView.epButton.addTarget(
+            self, action: #selector(pushEpButton), for: .touchUpInside)
+        mainView.rcButton.addTarget(
+            self, action: #selector(pushRcButton), for: .touchUpInside)
+        mainView.pinButton.addTarget(
+            self, action: #selector(pushPinButton), for: .touchUpInside)
 
         let wrapperView = WrapperView(mainView)
         wrapperView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
@@ -27,29 +33,33 @@ class MainViewController: WrapperViewController {
         self.view = wrapperView
     }
 
-    @objc func pushInButton(sender: UIButton){
+    @objc func pushInButton(sender: UIButton) {
         let nextViewController = INReaderViewController()
-        self.navigationController?.pushViewController(nextViewController, animated: true)
+        self.navigationController?.pushViewController(
+            nextViewController, animated: true)
     }
 
-    @objc func pushDlButton(sender: UIButton){
+    @objc func pushDlButton(sender: UIButton) {
         let nextViewController = DLReaderViewController()
-        self.navigationController?.pushViewController(nextViewController, animated: true)
+        self.navigationController?.pushViewController(
+            nextViewController, animated: true)
     }
 
-    @objc func pushEpButton(sender: UIButton){
+    @objc func pushEpButton(sender: UIButton) {
         let nextViewController = EPReaderViewController()
-        self.navigationController?.pushViewController(nextViewController, animated: true)
+        self.navigationController?.pushViewController(
+            nextViewController, animated: true)
     }
 
-    @objc func pushRcButton(sender: UIButton){
+    @objc func pushRcButton(sender: UIButton) {
         let nextViewController = RCReaderViewController()
-        self.navigationController?.pushViewController(nextViewController, animated: true)
+        self.navigationController?.pushViewController(
+            nextViewController, animated: true)
     }
 
-    @objc func pushPinButton(sender: UIButton){
+    @objc func pushPinButton(sender: UIButton) {
         let nextViewController = PinStatusViewController()
-        self.navigationController?.pushViewController(nextViewController, animated: true)
+        self.navigationController?.pushViewController(
+            nextViewController, animated: true)
     }
 }
-
