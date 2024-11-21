@@ -3,10 +3,10 @@
 XCODEBUILD := xcodebuild
 
 build:
-	$(XCODEBUILD) $(BUILD_OPT) build | xcpretty
+	$(XCODEBUILD) $(BUILD_OPT) build | xcbeautify
 
 archive:
-	$(XCODEBUILD) $(BUILD_OPT) archive | xcpretty
+	$(XCODEBUILD) $(BUILD_OPT) archive | xcbeautify
 
 clean:
 	$(XCODEBUILD) $(BUILD_OPT) clean
