@@ -23,7 +23,8 @@ class EPReaderView: UIView {
             UIScreen.main.bounds.size)
         explanation.text =
             "読み取り開始ボタンを押下後、端末をパスポートにかざしてください。\n"
-            + "生年月日および有効期限は年4桁、月2桁、日2桁の8文字を入力してください。"
+            + "生年月日および有効期限は年4桁、月2桁、日2桁の8文字を入力してください。\n"
+            + "これは実験的な機能です、古いパスポートは読めないことが多いです。"
 
         let numberLabel = CustomViewUtil.createTextView(
             UIScreen.main.bounds.size)

@@ -28,7 +28,7 @@ class MainView: UIView {
 
         epButton = CustomViewUtil.createButton(UIScreen.main.bounds.size)
         epButton.setTitle("パスポート", for: .normal)
-        epButton.isHidden = true
+        //epButton.isHidden = true
 
         rcButton = CustomViewUtil.createButton(UIScreen.main.bounds.size)
         rcButton.setTitle("在留カード", for: .normal)
