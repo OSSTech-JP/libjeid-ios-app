@@ -102,20 +102,28 @@ class PinStatusViewController: WrapperViewController,
                 case .IN:
                     self.publishLargeLog("カード種別: マイナンバーカード")
                     session.alertMessage = "\(msgReadingHeader)暗証番号ステータスの取得..."
-                    let textAp = try reader.selectINText()
-                    let textPin = try textAp.getPin()
-                    let textPinA = try textAp.getPinA()
-                    let textPinB = try textAp.getPinB()
+                    let textAP = try reader.selectINText()
+                    let textPin = try textAP.getPin()
+                    let textPinA = try textAP.getPinA()
+                    let textPinB = try textAP.getPinB()
                     var msg = "券面入力補助AP 暗証番号: \(textPin)\n"
                     msg += "券面入力補助AP 暗証番号A: \(textPinA)\n"
                     msg += "券面入力補助AP 暗証番号B: \(textPinB)\n"
 
-                    let visualAp = try reader.selectINVisual()
-                    let visualPinA = try visualAp.getPinA()
-                    let visualPinB = try visualAp.getPinB()
+                    let visualAP = try reader.selectINVisual()
+                    let visualPinA = try visualAP.getPinA()
+                    let visualPinB = try visualAP.getPinB()
                     session.alertMessage += "成功"
                     msg += "券面AP 暗証番号A: \(visualPinA)\n"
-                    msg += "券面AP 暗証番号B: \(visualPinB)"
+                    msg += "券面AP 暗証番号B: \(visualPinB)\n"
+
+                    do {
+                        let indlAP = try reader.selectINDL()
+                        let indlPin = try indlAP.getPin()
+                        msg += "マイナ運転免許証AP 暗証番号: \(indlPin)\n"
+                    } catch {
+                        // マイナ運転免許証APなし
+                    }
                     self.publishLargeLog(msg)
                 case .DL:
                     self.publishLargeLog("カード種別: 運転免許証")
