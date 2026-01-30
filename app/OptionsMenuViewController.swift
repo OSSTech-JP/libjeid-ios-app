@@ -84,7 +84,9 @@ class OptionsMenuViewController: UIViewController {
         let alert = UIAlertController(
             title: "IDリーダー \(bundleShortVersion)",
             message:
-                "\n\n\n\n\n\nlibjeid: \(BuildConfig.VERSION_NAME)\nPowerd by OSSTech",
+                "\n\n\n\n\n" +
+                "libjeid \(BuildConfig.VERSION_NAME)\nPowerd by OSSTech\n" +
+                "OpenSSL \(BuildConfig.OPENSSL_VERSION)\n",
             preferredStyle: .alert)
         let okAction = UIAlertAction(
             title: "OK", style: .default,
