@@ -20,58 +20,58 @@ class EPReaderView: UIView {
 
     init() {
         let explanation = CustomViewUtil.createTextView(
-            UIScreen.main.bounds.size)
+            CustomViewUtil.screenSize)
         explanation.text =
             "読み取り開始ボタンを押下後、端末をパスポートにかざしてください。\n"
             + "生年月日および有効期限は年4桁、月2桁、日2桁の8文字を入力してください。\n"
             + "これは実験的な機能です、古いパスポートは読めないことが多いです。"
 
         let numberLabel = CustomViewUtil.createTextView(
-            UIScreen.main.bounds.size)
+            CustomViewUtil.screenSize)
         numberLabel.text = "パスポート番号"
 
-        numberField = CustomViewUtil.createTextField(UIScreen.main.bounds.size)
+        numberField = CustomViewUtil.createTextField(CustomViewUtil.screenSize)
         numberField.keyboardType = UIKeyboardType.asciiCapable
         numberField.autocapitalizationType = .allCharacters
 
         let numberStackView = CustomViewUtil.createNarrowVerticalStackView(
-            UIScreen.main.bounds.size)
+            CustomViewUtil.screenSize)
         numberStackView.addArrangedSubview(numberLabel)
         numberStackView.addArrangedSubview(numberField)
 
         let birthDateLabel = CustomViewUtil.createTextView(
-            UIScreen.main.bounds.size)
+            CustomViewUtil.screenSize)
         birthDateLabel.text = "生年月日"
 
         birthDateField = CustomViewUtil.createTextField(
-            UIScreen.main.bounds.size)
+            CustomViewUtil.screenSize)
         birthDateField.keyboardType = UIKeyboardType.numberPad
         birthDateField.placeholder = "YYYYMMDD"
 
         let birthDateStackView = CustomViewUtil.createNarrowVerticalStackView(
-            UIScreen.main.bounds.size)
+            CustomViewUtil.screenSize)
         birthDateStackView.addArrangedSubview(birthDateLabel)
         birthDateStackView.addArrangedSubview(birthDateField)
 
         let expireDateLabel = CustomViewUtil.createTextView(
-            UIScreen.main.bounds.size)
+            CustomViewUtil.screenSize)
         expireDateLabel.text = "有効期限"
 
         expireDateField = CustomViewUtil.createTextField(
-            UIScreen.main.bounds.size)
+            CustomViewUtil.screenSize)
         expireDateField.keyboardType = UIKeyboardType.numberPad
         expireDateField.placeholder = "YYYYMMDD"
 
         let expireDateStackView = CustomViewUtil.createNarrowVerticalStackView(
-            UIScreen.main.bounds.size)
+            CustomViewUtil.screenSize)
         expireDateStackView.addArrangedSubview(expireDateLabel)
         expireDateStackView.addArrangedSubview(expireDateField)
 
-        startButton = CustomViewUtil.createButton(UIScreen.main.bounds.size)
+        startButton = CustomViewUtil.createButton(CustomViewUtil.screenSize)
         startButton.setTitle("読み取り開始", for: .normal)
 
         let stackView = CustomViewUtil.createVerticalStackView(
-            UIScreen.main.bounds.size)
+            CustomViewUtil.screenSize)
         stackView.addArrangedSubview(explanation)
         stackView.addArrangedSubview(numberStackView)
         stackView.addArrangedSubview(birthDateStackView)
