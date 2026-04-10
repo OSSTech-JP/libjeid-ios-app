@@ -7,8 +7,8 @@
 //
 
 import ImageIO
-import MobileCoreServices
 import UIKit
+import UniformTypeIdentifiers
 
 class WrapperViewController: UIViewController, UITextFieldDelegate {
     var logView: UITextView?
@@ -31,7 +31,7 @@ class WrapperViewController: UIViewController, UITextFieldDelegate {
             logFont = wrapperView.logView.font
         }
         largeLogFont = CustomViewUtil.createMediumTextFont(
-            UIScreen.main.bounds.size)
+            CustomViewUtil.screenSize)
         navigationItem.rightBarButtonItem = UIBarButtonItem(
             title: "︙", style: .done, target: self,
             action: #selector(pushThreeDotLeaders))
@@ -163,7 +163,7 @@ class WrapperViewController: UIViewController, UITextFieldDelegate {
                     - scrollView.contentOffset.y)
                 + activeField.frame.height
             let margin = activeField.frame.height * 0.5
-            let keyboardTop = UIScreen.main.bounds.size.height - keyboardHeight
+            let keyboardTop = CustomViewUtil.screenSize.height - keyboardHeight
             if fieldBottom + margin >= keyboardTop {
                 scrollView.contentOffset.y += fieldBottom + margin - keyboardTop
             }
@@ -206,7 +206,7 @@ class WrapperViewController: UIViewController, UITextFieldDelegate {
         let jpegData = NSMutableData()
         guard
             let destination = CGImageDestinationCreateWithData(
-                jpegData, kUTTypeJPEG, 1, nil)
+                jpegData, UTType.jpeg.identifier as CFString, 1, nil)
         else {
             return nil
         }
