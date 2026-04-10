@@ -17,17 +17,17 @@ class PinStatusView: UIView {
 
     init() {
         let explanation = CustomViewUtil.createTextView(
-            UIScreen.main.bounds.size)
+            CustomViewUtil.screenSize)
         explanation.text =
             "暗証番号ステータスを表示します。\n"
             + "運転免許証およびマイナンバーカードに対応しています。\n"
             + "読み取り開始ボタンを押下後、端末をカードにかざしてください。"
 
-        startButton = CustomViewUtil.createButton(UIScreen.main.bounds.size)
+        startButton = CustomViewUtil.createButton(CustomViewUtil.screenSize)
         startButton.setTitle("読み取り開始", for: .normal)
 
         let stackView = CustomViewUtil.createVerticalStackView(
-            UIScreen.main.bounds.size)
+            CustomViewUtil.screenSize)
         stackView.addArrangedSubview(explanation)
         stackView.addArrangedSubview(startButton)
 
