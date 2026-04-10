@@ -28,9 +28,8 @@ class WebViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
     public override func viewDidLoad() {
         super.viewDidLoad()
 
-        let screenWidth = UIScreen.main.bounds.size.width
-        let screenHeight = UIScreen.main.bounds.size.height
-        let paddingSize = CGFloat(min(screenWidth, screenHeight) / 50)
+        let screenSize = CustomViewUtil.screenSize
+        let paddingSize = CGFloat(min(screenSize.width, screenSize.height) / 50)
 
         webview = WKWebView(
             frame: view.bounds, configuration: WKWebViewConfiguration())
