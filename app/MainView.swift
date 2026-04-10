@@ -20,24 +20,24 @@ class MainView: UIView {
     }
 
     init() {
-        inButton = CustomViewUtil.createButton(UIScreen.main.bounds.size)
+        inButton = CustomViewUtil.createButton(CustomViewUtil.screenSize)
         inButton.setTitle("マイナンバーカード", for: .normal)
 
-        dlButton = CustomViewUtil.createButton(UIScreen.main.bounds.size)
+        dlButton = CustomViewUtil.createButton(CustomViewUtil.screenSize)
         dlButton.setTitle("運転免許証", for: .normal)
 
-        epButton = CustomViewUtil.createButton(UIScreen.main.bounds.size)
+        epButton = CustomViewUtil.createButton(CustomViewUtil.screenSize)
         epButton.setTitle("パスポート", for: .normal)
         //epButton.isHidden = true
 
-        rcButton = CustomViewUtil.createButton(UIScreen.main.bounds.size)
+        rcButton = CustomViewUtil.createButton(CustomViewUtil.screenSize)
         rcButton.setTitle("在留カード", for: .normal)
 
-        pinButton = CustomViewUtil.createButton(UIScreen.main.bounds.size)
+        pinButton = CustomViewUtil.createButton(CustomViewUtil.screenSize)
         pinButton.setTitle("暗証番号ステータス", for: .normal)
 
         let stackView = CustomViewUtil.createVerticalStackView(
-            UIScreen.main.bounds.size)
+            CustomViewUtil.screenSize)
         stackView.addArrangedSubview(inButton)
         stackView.addArrangedSubview(dlButton)
         stackView.addArrangedSubview(epButton)
