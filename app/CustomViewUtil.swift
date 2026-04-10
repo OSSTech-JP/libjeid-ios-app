@@ -9,6 +9,10 @@
 import UIKit
 
 class CustomViewUtil: UIView {
+    static var screenSize: CGSize {
+        UIScreen.main.bounds.size
+    }
+
     private static let LARGE_TEXT_SIZE_DENOMINATOR = CGFloat(18)
     private static let MEDIUM_TEXT_SIZE_DENOMINATOR = CGFloat(20)
     private static let SMALL_TEXT_SIZE_DENOMINATOR = CGFloat(24)
