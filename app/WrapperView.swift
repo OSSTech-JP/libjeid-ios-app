@@ -18,8 +18,8 @@ class WrapperView: UIView {
 
     init(_ view: UIView) {
         let stackView = CustomViewUtil.createVerticalStackView(
-            UIScreen.main.bounds.size)
-        logView = CustomViewUtil.createLogView(UIScreen.main.bounds.size)
+            CustomViewUtil.screenSize)
+        logView = CustomViewUtil.createLogView(CustomViewUtil.screenSize)
         stackView.addArrangedSubview(view)
         stackView.addArrangedSubview(logView)
 
@@ -40,7 +40,7 @@ class WrapperView: UIView {
             .isActive = true
 
         let paddingSize = CustomViewUtil.getAutoLayoutPadding(
-            UIScreen.main.bounds.size)
+            CustomViewUtil.screenSize)
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.topAnchor.constraint(
             equalTo: self.safeAreaLayoutGuide.topAnchor,
