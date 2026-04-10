@@ -19,11 +19,11 @@ class OptionsMenuView: UIView {
     }
 
     init() {
-        aboutButton = CustomViewUtil.createMenuItem(UIScreen.main.bounds.size)
+        aboutButton = CustomViewUtil.createMenuItem(CustomViewUtil.screenSize)
         aboutButton.setTitle("このアプリについて", for: .normal)
 
         stackView = CustomViewUtil.createNoSpaceVerticalStackView(
-            UIScreen.main.bounds.size)
+            CustomViewUtil.screenSize)
         stackView.addArrangedSubview(aboutButton)
 
         let cornerRadius: CGFloat = 4
@@ -91,7 +91,7 @@ class OptionsMenuView: UIView {
 
     private var stackViewMargin: CGFloat {
         return min(
-            UIScreen.main.bounds.size.width, UIScreen.main.bounds.size.height)
+            CustomViewUtil.screenSize.width, CustomViewUtil.screenSize.height)
             / 50
     }
 
@@ -112,10 +112,9 @@ class OptionsMenuView: UIView {
         if stackView.subviews.count > 2 {
             height += stackView.spacing * CGFloat(stackView.subviews.count - 1)
         }
-        let widthBaseSize = min(
-            UIScreen.main.bounds.width, UIScreen.main.bounds.height)
-        let heightBaseSize =
-            max(UIScreen.main.bounds.width, UIScreen.main.bounds.height)
+        let screenSize = CustomViewUtil.screenSize
+        let widthBaseSize = min(screenSize.width, screenSize.height)
+        let heightBaseSize = max(screenSize.width, screenSize.height)
             - rightViewMargin * 2
         if width < widthBaseSize * 0.2 {
             width = widthBaseSize * 0.2
