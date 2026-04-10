@@ -19,39 +19,39 @@ class DLReaderView: UIView {
 
     init() {
         let explanation = CustomViewUtil.createTextView(
-            UIScreen.main.bounds.size)
+            CustomViewUtil.screenSize)
         explanation.text =
             "読み取り開始ボタンを押下後、端末を免許証にかざしてください。\n"
             + "暗証番号2は省略可能です。その場合、顔写真および本籍は表示されません。"
 
-        let pin1Label = CustomViewUtil.createTextView(UIScreen.main.bounds.size)
+        let pin1Label = CustomViewUtil.createTextView(CustomViewUtil.screenSize)
         pin1Label.text = "暗証番号1(4桁、必須)"
-        let pin2Label = CustomViewUtil.createTextView(UIScreen.main.bounds.size)
+        let pin2Label = CustomViewUtil.createTextView(CustomViewUtil.screenSize)
         pin2Label.text = "暗証番号2(4桁、任意)"
 
-        pin1Field = CustomViewUtil.createTextField(UIScreen.main.bounds.size)
+        pin1Field = CustomViewUtil.createTextField(CustomViewUtil.screenSize)
         pin1Field.isSecureTextEntry = true
         pin1Field.keyboardType = UIKeyboardType.numberPad
 
-        pin2Field = CustomViewUtil.createTextField(UIScreen.main.bounds.size)
+        pin2Field = CustomViewUtil.createTextField(CustomViewUtil.screenSize)
         pin2Field.isSecureTextEntry = true
         pin2Field.keyboardType = UIKeyboardType.numberPad
 
         let pin1StackView = CustomViewUtil.createNarrowVerticalStackView(
-            UIScreen.main.bounds.size)
+            CustomViewUtil.screenSize)
         pin1StackView.addArrangedSubview(pin1Label)
         pin1StackView.addArrangedSubview(pin1Field)
 
         let pin2StackView = CustomViewUtil.createNarrowVerticalStackView(
-            UIScreen.main.bounds.size)
+            CustomViewUtil.screenSize)
         pin2StackView.addArrangedSubview(pin2Label)
         pin2StackView.addArrangedSubview(pin2Field)
 
-        startButton = CustomViewUtil.createButton(UIScreen.main.bounds.size)
+        startButton = CustomViewUtil.createButton(CustomViewUtil.screenSize)
         startButton.setTitle("読み取り開始", for: .normal)
 
         let stackView = CustomViewUtil.createVerticalStackView(
-            UIScreen.main.bounds.size)
+            CustomViewUtil.screenSize)
         stackView.addArrangedSubview(explanation)
         stackView.addArrangedSubview(pin1StackView)
         stackView.addArrangedSubview(pin2StackView)
