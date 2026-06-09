@@ -15,3 +15,6 @@ clean:
 unlock:
 	security unlock-keychain login.keychain
 
+install:
+	ios-deploy -d --id bfe675e91534de3ed276bec3cf1dd82d7433e0f1 --bundle build/Release-iphoneos/jeidreader.app
+
