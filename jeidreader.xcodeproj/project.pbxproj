@@ -28,6 +28,10 @@
 		3EA6BD1A23713FCD00529CC6 /* INReaderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EA6BD1923713FCD00529CC6 /* INReaderViewController.swift */; };
 		3EC85925256D117900D91D46 /* CustomScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC85924256D117900D91D46 /* CustomScrollView.swift */; };
 		3ECCFC412306AF7C00855D56 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ECCFC402306AF7C00855D56 /* WebViewController.swift */; };
+		3EFFEE0100000000000000A2 /* INDLReaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EFFEE0100000000000000A1 /* INDLReaderView.swift */; };
+		3EFFEE0100000000000000A4 /* INDLReaderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EFFEE0100000000000000A3 /* INDLReaderViewController.swift */; };
+		3EFFEE0100000000000000B2 /* UIViewController+OptionsMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EFFEE0100000000000000B1 /* UIViewController+OptionsMenu.swift */; };
+		3EFFEE0100000000000000B4 /* CGImage+EncodeJpeg.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EFFEE0100000000000000B3 /* CGImage+EncodeJpeg.swift */; };
 		FBB68B3822F4267A00042971 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBB68B3722F4267A00042971 /* AppDelegate.swift */; };
 		FBB68B3A22F4267A00042971 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBB68B3922F4267A00042971 /* SceneDelegate.swift */; };
 		FBB68B3C22F4267A00042971 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBB68B3B22F4267A00042971 /* MainViewController.swift */; };
@@ -70,6 +74,10 @@
 		3EA6BD1923713FCD00529CC6 /* INReaderViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = INReaderViewController.swift; sourceTree = "<group>"; };
 		3EC85924256D117900D91D46 /* CustomScrollView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomScrollView.swift; sourceTree = "<group>"; };
 		3ECCFC402306AF7C00855D56 /* WebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
+		3EFFEE0100000000000000A1 /* INDLReaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = INDLReaderView.swift; sourceTree = "<group>"; };
+		3EFFEE0100000000000000A3 /* INDLReaderViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = INDLReaderViewController.swift; sourceTree = "<group>"; };
+		3EFFEE0100000000000000B1 /* UIViewController+OptionsMenu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+OptionsMenu.swift"; sourceTree = "<group>"; };
+		3EFFEE0100000000000000B3 /* CGImage+EncodeJpeg.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGImage+EncodeJpeg.swift"; sourceTree = "<group>"; };
 		FB481A0C22F45ACC003865D3 /* jeidreader.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = jeidreader.entitlements; sourceTree = "<group>"; };
 		FB74434E29BB7DA900FEE36B /* jeidreader.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = jeidreader.xcconfig; sourceTree = "<group>"; };
 		FBB68B3422F4267A00042971 /* jeidreader.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = jeidreader.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -124,6 +132,7 @@
 			isa = PBXGroup;
 			children = (
 				FBB68B3722F4267A00042971 /* AppDelegate.swift */,
+				3EFFEE0100000000000000B3 /* CGImage+EncodeJpeg.swift */,
 				3E45A3A2246555DE00681AD9 /* CustomButton.swift */,
 				3E113E7C230E8DF2001E2AEB /* CustomColor.swift */,
 				3EC85924256D117900D91D46 /* CustomScrollView.swift */,
@@ -134,6 +143,8 @@
 				3E4D626325528CDC000BA6EC /* EPReaderViewController.swift */,
 				3EA6BD152371291600529CC6 /* INReaderView.swift */,
 				3EA6BD1923713FCD00529CC6 /* INReaderViewController.swift */,
+				3EFFEE0100000000000000A1 /* INDLReaderView.swift */,
+				3EFFEE0100000000000000A3 /* INDLReaderViewController.swift */,
 				FBB68B4D22F43BB700042971 /* MainView.swift */,
 				FBB68B3B22F4267A00042971 /* MainViewController.swift */,
 				3E4B9852256522BD00958CDA /* OptionsMenuView.swift */,
@@ -143,6 +154,7 @@
 				3E5B941A24504458005BE553 /* RCReaderView.swift */,
 				3E5B941C24504469005BE553 /* RCReaderViewController.swift */,
 				FBB68B3922F4267A00042971 /* SceneDelegate.swift */,
+				3EFFEE0100000000000000B1 /* UIViewController+OptionsMenu.swift */,
 				3ECCFC402306AF7C00855D56 /* WebViewController.swift */,
 				3E495618236BE8C200A61ED3 /* WrapperView.swift */,
 				3E49561A236C49DB00A61ED3 /* WrapperViewController.swift */,
@@ -239,6 +251,10 @@
 				3E5A6B5323068EBE00B9D674 /* DLReaderView.swift in Sources */,
 				3E4D626425528CDC000BA6EC /* EPReaderView.swift in Sources */,
 				3EA6BD1A23713FCD00529CC6 /* INReaderViewController.swift in Sources */,
+				3EFFEE0100000000000000A2 /* INDLReaderView.swift in Sources */,
+				3EFFEE0100000000000000A4 /* INDLReaderViewController.swift in Sources */,
+				3EFFEE0100000000000000B2 /* UIViewController+OptionsMenu.swift in Sources */,
+				3EFFEE0100000000000000B4 /* CGImage+EncodeJpeg.swift in Sources */,
 				3EC85925256D117900D91D46 /* CustomScrollView.swift in Sources */,
 				3E4B9853256522BD00958CDA /* OptionsMenuView.swift in Sources */,
 				3EA6BD162371291600529CC6 /* INReaderView.swift in Sources */,
@@ -291,7 +307,6 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = FC89S46DN3;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -357,7 +372,6 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = FC89S46DN3;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
