@@ -1,6 +1,10 @@
 .PHONY: build archive
 
 XCODEBUILD := xcodebuild
+DEVELOPMENT_TEAM ?= FC89S46DN3
+DEVICE_ID ?= bfe675e91534de3ed276bec3cf1dd82d7433e0f1
+
+BUILD_OPT += DEVELOPMENT_TEAM=$(DEVELOPMENT_TEAM)
 
 build:
 	$(XCODEBUILD) $(BUILD_OPT) build | xcbeautify
@@ -16,5 +20,5 @@ unlock:
 	security unlock-keychain login.keychain
 
 install:
-	ios-deploy -d --id bfe675e91534de3ed276bec3cf1dd82d7433e0f1 --bundle build/Release-iphoneos/jeidreader.app
+	ios-deploy -d --id $(DEVICE_ID) --bundle build/Release-iphoneos/jeidreader.app
 
