@@ -11,6 +11,7 @@ import UIKit
 class MainView: UIView {
     let inButton: UIButton
     let dlButton: UIButton
+    let indlButton: UIButton
     let epButton: UIButton
     let rcButton: UIButton
     let pinButton: UIButton
@@ -26,6 +27,9 @@ class MainView: UIView {
         dlButton = CustomViewUtil.createButton(CustomViewUtil.screenSize)
         dlButton.setTitle("運転免許証", for: .normal)
 
+        indlButton = CustomViewUtil.createButton(CustomViewUtil.screenSize)
+        indlButton.setTitle("マイナ免許証", for: .normal)
+
         epButton = CustomViewUtil.createButton(CustomViewUtil.screenSize)
         epButton.setTitle("パスポート", for: .normal)
         //epButton.isHidden = true
@@ -40,6 +44,7 @@ class MainView: UIView {
             CustomViewUtil.screenSize)
         stackView.addArrangedSubview(inButton)
         stackView.addArrangedSubview(dlButton)
+        stackView.addArrangedSubview(indlButton)
         stackView.addArrangedSubview(epButton)
         stackView.addArrangedSubview(rcButton)
         stackView.addArrangedSubview(pinButton)

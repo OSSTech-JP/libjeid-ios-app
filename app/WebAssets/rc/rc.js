@@ -1,27 +1,3 @@
-function addMessage(msg)
-{
-    var area = document.getElementById("msg");
-    if (area) {
-        area.innerHTML += htmlEscape(msg) + '<br/>';
-    }
-}
-
-function clearMessage()
-{
-    var area = document.getElementById("msg");
-    if (area) {
-        area.innerHTML = '';
-    }
-}
-
-function htmlEscape(str) {
-    return str.replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#039;');
-}
-
 function render(json) {
     data = JSON.parse(json);
     if ('rc-front-image' in data) {
@@ -41,6 +17,13 @@ function render(json) {
                 document.getElementById("rc-labels").style.display = "none";
                 document.getElementById("sprc-labels").style.display = "block";
         }
+    }
+    if ('rc-validation-result' in data) {
+        // 真正性検証結果は VALID / INVALID_SIGNATURE / INVALID_CERTIFICATE の3パターン。
+        var status = data['rc-validation-result'];
+        var icon = (status === 'VALID') ? "verify-success.png" : "verify-failed.png";
+        document.getElementById("rc-validation-result-icon").src = icon;
+        document.getElementById("rc-validation-result-text").textContent = status;
     }
 }
 

@@ -9,15 +9,16 @@
 import UIKit
 @preconcurrency import WebKit
 
-class WebViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
+class WebViewController: UIViewController, WKNavigationDelegate {
 
-    var webview: WKWebView!
-    var script: String?
-    let url: URL
+    private let webview = WKWebView(
+        frame: .zero, configuration: WKWebViewConfiguration())
+    private let url: URL
+    private let renderData: [String: Any]
 
-    init(_ url: URL, _ script: String?) {
+    init(_ url: URL, renderData: [String: Any]) {
         self.url = url
-        self.script = script
+        self.renderData = renderData
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -31,10 +32,7 @@ class WebViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
         let screenSize = CustomViewUtil.screenSize
         let paddingSize = CGFloat(min(screenSize.width, screenSize.height) / 50)
 
-        webview = WKWebView(
-            frame: view.bounds, configuration: WKWebViewConfiguration())
         view.backgroundColor = UIColor.white
-        webview.uiDelegate = self
         webview.navigationDelegate = self
 
         view.addSubview(webview)
@@ -57,49 +55,37 @@ class WebViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
             constant: paddingSize * -1
         ).isActive = true
 
-        webview.load(URLRequest(url: url))
+        // WebAssetsルート(.../WebAssets)に読み取り許可を与え、
+        // indl/indl.html の ../dl/normalize.css のようなクロスディレクトリ参照を可能にする
+        let readAccessUrl = url.deletingLastPathComponent()
+            .deletingLastPathComponent()
+        webview.loadFileURL(url, allowingReadAccessTo: readAccessUrl)
 
-        navigationItem.rightBarButtonItem = UIBarButtonItem(
-            title: "︙", style: .done, target: self,
-            action: #selector(pushThreeDotLeaders))
-    }
-
-    func webView(
-        _ webView: WKWebView,
-        runJavaScriptAlertPanelWithMessage message: String,
-        initiatedByFrame frame: WKFrameInfo,
-        completionHandler: @escaping () -> Void
-    ) {
-        let alertController = UIAlertController(
-            title: nil, message: message,
-            preferredStyle: UIAlertController.Style.alert)
-        let alertAction = UIAlertAction(
-            title: "OK", style: UIAlertAction.Style.default
-        ) { (action: UIAlertAction) -> Void in
-            alertController.dismiss(animated: true, completion: nil)
-        }
-        alertController.addAction(alertAction)
-        present(alertController, animated: true)
-        completionHandler()
+        installOptionsMenuButton()
     }
 
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        if let script = script {
-            webview.evaluateJavaScript(script) { (_, error) in
-                if let error = error {
-                    print("evaluateJavaScript failed: \(error)")
-                }
+        guard !renderData.isEmpty else {
+            return
+        }
+        let json: String
+        do {
+            let data = try JSONSerialization.data(
+                withJSONObject: renderData, options: [])
+            json = String(decoding: data, as: UTF8.self)
+        } catch {
+            print("JSON serialize failed: \(error)")
+            return
+        }
+        webview.callAsyncJavaScript(
+            "render(json);",
+            arguments: ["json": json],
+            in: nil,
+            in: .page
+        ) { result in
+            if case .failure(let error) = result {
+                print("callAsyncJavaScript failed: \(error)")
             }
         }
-    }
-
-    @objc func pushThreeDotLeaders(sender: UIButton) {
-        let optionsMenuViewController = OptionsMenuViewController()
-        optionsMenuViewController.modalPresentationStyle = .overCurrentContext
-        optionsMenuViewController.closeHandler = { viewController in
-            viewController.dismiss(animated: false, completion: nil)
-        }
-        self.present(
-            optionsMenuViewController, animated: false, completion: nil)
     }
 }

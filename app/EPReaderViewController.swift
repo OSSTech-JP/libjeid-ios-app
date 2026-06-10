@@ -22,6 +22,8 @@ class EPReaderViewController: WrapperViewController, NFCTagReaderSessionDelegate
     private var number: String?
     private var birthDate: String?
     private var expireDate: String?
+    // 実行したアクセスコントロール方式("PACE" または "BAC")
+    private var acMethod: String = "BAC"
 
     override func loadView() {
         self.title = "パスポートリーダー"
@@ -187,16 +189,17 @@ class EPReaderViewController: WrapperViewController, NFCTagReaderSessionDelegate
                                 expireDate.index(
                                     expireDate.startIndex, offsetBy: 2)..<expireDate
                                     .endIndex]))
-                    session.alertMessage = "\(msgReadingHeader)BAC開始..."
-                    self.publishLog("## Basic Access Control開始")
-                    try ap.startBAC(epKey)
-                    self.publishLog("成功\n")
+                    // PACE 対応カードではまず PACE を試行し、失敗時は BAC にフォールバックする
+                    session.alertMessage = "\(msgReadingHeader)Access Control開始..."
+                    self.publishLog("## Access Control開始")
+                    self.acMethod = try ap.startAC(epKey)
+                    self.publishLog("成功(\(self.acMethod))\n")
                     session.alertMessage += "成功"
                 } catch let jeidError as JeidError {
                     switch jeidError {
                     case .invalidKey:
                         session.invalidate(
-                            errorMessage: "\(msgErrorHeader)BAC失敗")
+                            errorMessage: "\(msgErrorHeader)アクセスコントロール失敗")
                         self.publishLog("パスポート番号、生年月日または有効期限が間違っています\n")
                         self.handleInvalidKeyError(jeidError)
                         return
@@ -242,13 +245,16 @@ class EPReaderViewController: WrapperViewController, NFCTagReaderSessionDelegate
                     dataDict["ep-photo"] = src
                 }
 
-                dataDict["ep-bac-result"] = true
+                // 実行したアクセスコントロール方式("PACE" または "BAC")
+                dataDict["ep-ac-result"] = true
+                dataDict["ep-ac-method"] = self.acMethod
 
                 self.publishLog("## Passive Authentication")
                 do {
                     let paResult = try files.validate()
                     dataDict["ep-pa-result"] = paResult.isValid
-                    self.publishLog("検証結果: \(paResult.isValid)\n")
+                    self.publishLog(
+                        "検証結果: \(paResult.isValid) (status: \(paResult.status.stringValue))\n")
                 } catch JeidError.unsupportedOperation {
                     // 無償版の場合、EPFiles#validate()でJeidError.unsupportedOperationが返ります
                     self.publishLog(
@@ -298,27 +304,16 @@ class EPReaderViewController: WrapperViewController, NFCTagReaderSessionDelegate
 
     func openWebView(_ dict: [String: Any]) {
         DispatchQueue.main.async {
-            do {
-                let jsonData: Data = try JSONSerialization.data(
-                    withJSONObject: dict, options: [])
-                var jsonStr: String? = String(bytes: jsonData, encoding: .utf8)
-                jsonStr = jsonStr?.replacingOccurrences(
-                    of: "\\\"", with: "\\\\\"")
-
-                let path = Bundle.main.path(
-                    forResource: "ep", ofType: "html",
-                    inDirectory: "WebAssets/ep")!
-                let localHtmlUrl = URL(
-                    fileURLWithPath: path, isDirectory: false)
-                let webViewController = WebViewController(
-                    localHtmlUrl, "render(\'\(jsonStr!)\');")
-                webViewController.title = "パスポートビューアー"
-                self.navigationController?.pushViewController(
-                    webViewController, animated: true)
-            } catch (let error) {
-                self.publishLog("\(error)")
-                self.openAlertView("エラー", "読み取り結果の表示に失敗しました")
-            }
+            let path = Bundle.main.path(
+                forResource: "ep", ofType: "html",
+                inDirectory: "WebAssets/ep")!
+            let localHtmlUrl = URL(
+                fileURLWithPath: path, isDirectory: false)
+            let webViewController = WebViewController(
+                localHtmlUrl, renderData: dict)
+            webViewController.title = "パスポートビューアー"
+            self.navigationController?.pushViewController(
+                webViewController, animated: true)
         }
     }
 

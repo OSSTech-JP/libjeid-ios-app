@@ -329,7 +329,7 @@ class DLReaderViewController: WrapperViewController, NFCTagReaderSessionDelegate
                     // 顔写真をCGImageオブジェクトで取得
                     if let photoImage = photo.photoImage {
                         // CGImageオブジェクトからJpeg形式に変換
-                        if let jpegData = try self.encodeJpeg(photoImage) {
+                        if let jpegData = try photoImage.encodeJpeg() {
                             let src =
                                 "data:image/jpeg;base64,\(jpegData.base64EncodedString())"
                             dataDict["dl-photo"] = src
@@ -358,9 +358,13 @@ class DLReaderViewController: WrapperViewController, NFCTagReaderSessionDelegate
 
                     let signature = try files.getSignature()
                     self.publishLog("## 電子署名")
+                    if let signatureIssuer = signature.issuer {
+                        self.publishLog("Issuer: \(signatureIssuer)")
+                        dataDict["signature-issuer"] = signatureIssuer
+                    }
                     if let signatureSubject = signature.subject {
                         self.publishLog("Subject: \(signatureSubject)")
-                        dataDict["dl-signature-subject"] = signatureSubject
+                        dataDict["signature-subject"] = signatureSubject
                     }
                     if let signatureSKI = signature.subjectKeyIdentifier {
                         let signatureSkiStr = signatureSKI.map {
@@ -368,12 +372,13 @@ class DLReaderViewController: WrapperViewController, NFCTagReaderSessionDelegate
                         }.joined(separator: ":")
                         self.publishLog(
                             "Subject Key Identifier: \(signatureSkiStr)")
-                        dataDict["dl-signature-ski"] = signatureSkiStr
+                        dataDict["signature-ski"] = signatureSkiStr
                     }
 
                     // 真正性検証
                     do {
                         let result = try files.validate()
+                        dataDict["signature-valid"] = result.isValid
                         dataDict["dl-verified"] = result.isValid
                         self.publishLog("真正性検証結果: \(result)\n")
                     } catch JeidError.unsupportedOperation {
@@ -400,27 +405,16 @@ class DLReaderViewController: WrapperViewController, NFCTagReaderSessionDelegate
 
     func openWebView(_ dict: [String: Any]) {
         DispatchQueue.main.async {
-            do {
-                let jsonData: Data = try JSONSerialization.data(
-                    withJSONObject: dict, options: [])
-                var jsonStr: String? = String(bytes: jsonData, encoding: .utf8)
-                jsonStr = jsonStr?.replacingOccurrences(
-                    of: "\\\"", with: "\\\\\"")
-
-                let path = Bundle.main.path(
-                    forResource: "dl", ofType: "html",
-                    inDirectory: "WebAssets/dl")!
-                let localHtmlUrl = URL(
-                    fileURLWithPath: path, isDirectory: false)
-                let webViewController = WebViewController(
-                    localHtmlUrl, "render(\'\(jsonStr!)\');")
-                webViewController.title = "運転免許証ビューア"
-                self.navigationController?.pushViewController(
-                    webViewController, animated: true)
-            } catch (let error) {
-                self.publishLog("\(error)")
-                self.openAlertView("エラー", "読み取り結果の表示に失敗しました")
-            }
+            let path = Bundle.main.path(
+                forResource: "dl", ofType: "html",
+                inDirectory: "WebAssets/dl")!
+            let localHtmlUrl = URL(
+                fileURLWithPath: path, isDirectory: false)
+            let webViewController = WebViewController(
+                localHtmlUrl, renderData: dict)
+            webViewController.title = "運転免許証ビューア"
+            self.navigationController?.pushViewController(
+                webViewController, animated: true)
         }
     }
 

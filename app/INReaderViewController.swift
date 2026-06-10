@@ -227,7 +227,7 @@ class INReaderViewController: WrapperViewController, NFCTagReaderSessionDelegate
 
                 if let photoImage = visualEntries.photoImage {
                     // CGImageオブジェクトからJpeg形式に変換
-                    if let jpegData = try self.encodeJpeg(photoImage) {
+                    if let jpegData = try photoImage.encodeJpeg() {
                         let src =
                             "data:image/jpeg;base64,\(jpegData.base64EncodedString())"
                         dataDict["cardinfo-photo"] = src
@@ -268,27 +268,16 @@ class INReaderViewController: WrapperViewController, NFCTagReaderSessionDelegate
 
     func openWebView(_ dict: [String: Any]) {
         DispatchQueue.main.async {
-            do {
-                let jsonData: Data = try JSONSerialization.data(
-                    withJSONObject: dict, options: [])
-                var jsonStr: String? = String(bytes: jsonData, encoding: .utf8)
-                jsonStr = jsonStr?.replacingOccurrences(
-                    of: "\\\"", with: "\\\\\"")
-
-                let path = Bundle.main.path(
-                    forResource: "in", ofType: "html",
-                    inDirectory: "WebAssets/in")!
-                let localHtmlUrl = URL(
-                    fileURLWithPath: path, isDirectory: false)
-                let webViewController = WebViewController(
-                    localHtmlUrl, "render(\'\(jsonStr!)\');")
-                webViewController.title = "マイナンバーカードビューア"
-                self.navigationController?.pushViewController(
-                    webViewController, animated: true)
-            } catch (let error) {
-                self.publishLog("\(error)")
-                self.openAlertView("エラー", "読み取り結果の表示に失敗しました")
-            }
+            let path = Bundle.main.path(
+                forResource: "in", ofType: "html",
+                inDirectory: "WebAssets/in")!
+            let localHtmlUrl = URL(
+                fileURLWithPath: path, isDirectory: false)
+            let webViewController = WebViewController(
+                localHtmlUrl, renderData: dict)
+            webViewController.title = "マイナンバーカードビューア"
+            self.navigationController?.pushViewController(
+                webViewController, animated: true)
         }
     }
 

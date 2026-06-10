@@ -6,9 +6,7 @@
 //  All rights reserved.
 //
 
-import ImageIO
 import UIKit
-import UniformTypeIdentifiers
 
 class WrapperViewController: UIViewController, UITextFieldDelegate {
     var logView: UITextView?
@@ -32,18 +30,12 @@ class WrapperViewController: UIViewController, UITextFieldDelegate {
         }
         largeLogFont = CustomViewUtil.createMediumTextFont(
             CustomViewUtil.screenSize)
-        navigationItem.rightBarButtonItem = UIBarButtonItem(
-            title: "︙", style: .done, target: self,
-            action: #selector(pushThreeDotLeaders))
+        installOptionsMenuButton()
     }
 
     func textFieldDidBeginEditing(_ textField: UITextField) {
         activeField = textField
         hasResized = false
-    }
-
-    func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
-        return true
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -140,6 +132,25 @@ class WrapperViewController: UIViewController, UITextFieldDelegate {
                 logView.insertText(text + "\n")
                 logView.isEditable = false
             }
+            // 追記のたびに最新行(エラーを含む)が見えるよう最下部へスクロールする
+            self.scrollLogToBottom()
+        }
+    }
+
+    /// ログ(外側スクロールビュー)を最下部までスクロールして最新行を表示する。
+    private func scrollLogToBottom() {
+        guard let scrollView = self.scrollView else {
+            return
+        }
+        scrollView.layoutIfNeeded()
+        let visibleHeight = scrollView.bounds.height
+            - scrollView.adjustedContentInset.top
+            - scrollView.adjustedContentInset.bottom
+        let offsetY = scrollView.contentSize.height - visibleHeight
+        if offsetY > 0 {
+            scrollView.setContentOffset(
+                CGPoint(x: 0, y: offsetY - scrollView.adjustedContentInset.top),
+                animated: false)
         }
     }
 
@@ -191,34 +202,4 @@ class WrapperViewController: UIViewController, UITextFieldDelegate {
         return originY
     }
 
-    @objc func pushThreeDotLeaders(sender: UIButton) {
-        let optionsMenuViewController = OptionsMenuViewController()
-        optionsMenuViewController.modalPresentationStyle = .overCurrentContext
-        optionsMenuViewController.closeHandler = { viewController in
-            viewController.dismiss(animated: false, completion: nil)
-        }
-        self.present(
-            optionsMenuViewController, animated: false, completion: nil)
-    }
-
-    // CGImageオブジェクトをJpeg形式に変換
-    func encodeJpeg(_ image: CGImage) throws -> Data? {
-        let jpegData = NSMutableData()
-        guard
-            let destination = CGImageDestinationCreateWithData(
-                jpegData, UTType.jpeg.identifier as CFString, 1, nil)
-        else {
-            return nil
-        }
-        let options: [CFString: Any] = [
-            kCGImageDestinationLossyCompressionQuality: 0.9
-        ]
-        CGImageDestinationAddImage(destination, image, options as CFDictionary)
-
-        if CGImageDestinationFinalize(destination) {
-            return jpegData as Data
-        } else {
-            return nil
-        }
-    }
 }

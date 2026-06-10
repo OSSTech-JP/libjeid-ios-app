@@ -204,6 +204,7 @@ class RCReaderViewController: WrapperViewController, NFCTagReaderSessionDelegate
                 do {
                     let result = try files.validate()
                     dataDict["rc-valid"] = result.isValid
+                    dataDict["rc-validation-result"] = result.description
                     self.publishLog("真正性検証結果: \(result)\n")
                 } catch JeidError.unsupportedOperation {
                     // 無償版の場合、RCFiles#validate()でJeidError.unsupportedOperationが返ります
@@ -224,27 +225,15 @@ class RCReaderViewController: WrapperViewController, NFCTagReaderSessionDelegate
 
     func openWebView(_ dict: [String: Any]) {
         DispatchQueue.main.async {
-            do {
-                let jsonData: Data = try JSONSerialization.data(
-                    withJSONObject: dict, options: [])
-                var jsonStr: String? = String(bytes: jsonData, encoding: .utf8)
-                jsonStr = jsonStr?.replacingOccurrences(
-                    of: "\\\"", with: "\\\\\"")
-
-                let path = Bundle.main.path(
-                    forResource: "rc", ofType: "html",
-                    inDirectory: "WebAssets/rc")!
-                let localHtmlUrl = URL(
-                    fileURLWithPath: path, isDirectory: false)
-                let webViewController = WebViewController(
-                    localHtmlUrl, "render(\'\(jsonStr!)\');")
-                webViewController.title = "在留カードビューア"
-                self.navigationController?.pushViewController(
-                    webViewController, animated: true)
-            } catch (let error) {
-                self.publishLog("\(error)")
-                self.openAlertView("エラー", "読み取り結果の表示に失敗しました")
-            }
+            let path = Bundle.main.path(
+                forResource: "rc", ofType: "html",
+                inDirectory: "WebAssets/rc")!
+            let localHtmlUrl = URL(fileURLWithPath: path, isDirectory: false)
+            let webViewController = WebViewController(
+                localHtmlUrl, renderData: dict)
+            webViewController.title = "在留カードビューア"
+            self.navigationController?.pushViewController(
+                webViewController, animated: true)
         }
     }
 

@@ -20,6 +20,8 @@ class MainViewController: WrapperViewController {
             self, action: #selector(pushInButton), for: .touchUpInside)
         mainView.dlButton.addTarget(
             self, action: #selector(pushDlButton), for: .touchUpInside)
+        mainView.indlButton.addTarget(
+            self, action: #selector(pushIndlButton), for: .touchUpInside)
         mainView.epButton.addTarget(
             self, action: #selector(pushEpButton), for: .touchUpInside)
         mainView.rcButton.addTarget(
@@ -41,6 +43,12 @@ class MainViewController: WrapperViewController {
 
     @objc func pushDlButton(sender: UIButton) {
         let nextViewController = DLReaderViewController()
+        self.navigationController?.pushViewController(
+            nextViewController, animated: true)
+    }
+
+    @objc func pushIndlButton(sender: UIButton) {
+        let nextViewController = INDLReaderViewController()
         self.navigationController?.pushViewController(
             nextViewController, animated: true)
     }
