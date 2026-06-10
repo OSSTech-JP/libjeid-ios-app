@@ -140,17 +140,17 @@ class PinStatusViewController: WrapperViewController,
                 case .EP:
                     self.publishLargeLog("カード種別: パスポート")
                 case .RC:
+                    self.publishLargeLog("カード種別: 在留カード")
                     let ap = try reader.selectRC()
-                    let freeFiles = try ap.readFiles()
-                    let cardType = try freeFiles.getCardType()
-                    switch cardType.type {
-                    case "1":
-                        self.publishLargeLog("カード種別: 在留カード")
-                    case "2":
-                        self.publishLargeLog("カード種別: 特別永住者証明書")
-                    default:
-                        self.publishLargeLog("カード種別: 在留カード等(不明)")
-                    }
+                    let rcType = try ap.readCardType()
+                    self.publishLargeLog("在留カード種別: \(rcType.description)")
+                case .RC2:
+                    self.publishLargeLog("カード種別: 第2世代在留カード")
+                    let ap = try reader.selectRC()
+                    let rcType = try ap.readCardType()
+                    self.publishLargeLog("在留カード種別: \(rcType.description)")
+                case .RCS:
+                    self.publishLargeLog("カード種別: 特定在留カード")
                 default:
                     self.publishLargeLog("カード種別: 不明")
                 }
