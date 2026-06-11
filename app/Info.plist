@@ -46,18 +46,27 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>com.apple.developer.nfc.readersession.iso7816.select-identifiers</key>
+	<!--
+	  タグ検出(ポーリング)フェーズで iOS が自動 SELECT する AID 群。
+	-->
 	<array>
+		<!-- 運転免許証 -->
 		<string>A00000023101</string>
 		<string>A00000023102</string>
+		<!-- パスポート -->
 		<string>A0000002471001</string>
+		<!-- 公的個人認証AP -->
 		<string>D392F000260100000001</string>
+		<!-- 住基券面AP -->
 		<string>D3921000310001010401</string>
+		<!-- マイナンバーカード 券面AP -->
 		<string>D3921000310001010402</string>
+		<!-- マイナンバーカード 券面入力補助AP -->
 		<string>D3921000310001010408</string>
+		<!-- 在留カード -->
 		<string>D392F0004F0200000000000000000000</string>
 		<string>D392F0004F0300000000000000000000</string>
 		<string>D392F0004F0400000000000000000000</string>
-		<string>00000000000000</string>
 	</array>
 </dict>
 </plist>
