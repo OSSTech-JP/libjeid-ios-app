@@ -149,8 +149,6 @@ class PinStatusViewController: WrapperViewController,
                     let ap = try reader.selectRC()
                     let rcType = try ap.readCardType()
                     self.publishLargeLog("在留カード種別: \(rcType.description)")
-                case .RCS:
-                    self.publishLargeLog("カード種別: 特定在留カード")
                 default:
                     self.publishLargeLog("カード種別: 不明")
                 }
