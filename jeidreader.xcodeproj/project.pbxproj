@@ -24,6 +24,11 @@
 		3E5A6B57230691D900B9D674 /* DLReaderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5A6B56230691D800B9D674 /* DLReaderViewController.swift */; };
 		3E5B941B24504458005BE553 /* RCReaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5B941A24504458005BE553 /* RCReaderView.swift */; };
 		3E5B941D24504469005BE553 /* RCReaderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5B941C24504469005BE553 /* RCReaderViewController.swift */; };
+		ACE0000000000000000A002 /* RC2ReaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACE0000000000000000A001 /* RC2ReaderView.swift */; };
+		ACE0000000000000000A004 /* RC2ReaderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACE0000000000000000A003 /* RC2ReaderViewController.swift */; };
+		ACE0000000000000000A006 /* RCSReaderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACE0000000000000000A005 /* RCSReaderViewController.swift */; };
+		ACE0000000000000000A008 /* RC2ViewerData.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACE0000000000000000A007 /* RC2ViewerData.swift */; };
+		ACE0000000000000000A00A /* TestMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACE0000000000000000A009 /* TestMode.swift */; };
 		3EA6BD162371291600529CC6 /* INReaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EA6BD152371291600529CC6 /* INReaderView.swift */; };
 		3EA6BD1A23713FCD00529CC6 /* INReaderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EA6BD1923713FCD00529CC6 /* INReaderViewController.swift */; };
 		3EC85925256D117900D91D46 /* CustomScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC85924256D117900D91D46 /* CustomScrollView.swift */; };
@@ -70,6 +75,11 @@
 		3E5A6B56230691D800B9D674 /* DLReaderViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DLReaderViewController.swift; sourceTree = "<group>"; };
 		3E5B941A24504458005BE553 /* RCReaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RCReaderView.swift; sourceTree = "<group>"; };
 		3E5B941C24504469005BE553 /* RCReaderViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RCReaderViewController.swift; sourceTree = "<group>"; };
+		ACE0000000000000000A001 /* RC2ReaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RC2ReaderView.swift; sourceTree = "<group>"; };
+		ACE0000000000000000A003 /* RC2ReaderViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RC2ReaderViewController.swift; sourceTree = "<group>"; };
+		ACE0000000000000000A005 /* RCSReaderViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RCSReaderViewController.swift; sourceTree = "<group>"; };
+		ACE0000000000000000A007 /* RC2ViewerData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RC2ViewerData.swift; sourceTree = "<group>"; };
+		ACE0000000000000000A009 /* TestMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestMode.swift; sourceTree = "<group>"; };
 		3EA6BD152371291600529CC6 /* INReaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = INReaderView.swift; sourceTree = "<group>"; };
 		3EA6BD1923713FCD00529CC6 /* INReaderViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = INReaderViewController.swift; sourceTree = "<group>"; };
 		3EC85924256D117900D91D46 /* CustomScrollView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomScrollView.swift; sourceTree = "<group>"; };
@@ -153,6 +163,11 @@
 				3E4EF866238F9CE000DF3747 /* PinStatusViewController.swift */,
 				3E5B941A24504458005BE553 /* RCReaderView.swift */,
 				3E5B941C24504469005BE553 /* RCReaderViewController.swift */,
+				ACE0000000000000000A001 /* RC2ReaderView.swift */,
+				ACE0000000000000000A003 /* RC2ReaderViewController.swift */,
+				ACE0000000000000000A005 /* RCSReaderViewController.swift */,
+				ACE0000000000000000A007 /* RC2ViewerData.swift */,
+				ACE0000000000000000A009 /* TestMode.swift */,
 				FBB68B3922F4267A00042971 /* SceneDelegate.swift */,
 				3EFFEE0100000000000000B1 /* UIViewController+OptionsMenu.swift */,
 				3ECCFC402306AF7C00855D56 /* WebViewController.swift */,
@@ -243,6 +258,11 @@
 				FBB68B3C22F4267A00042971 /* MainViewController.swift in Sources */,
 				3E4A674E23693AD600B57F30 /* CustomViewUtil.swift in Sources */,
 				3E5B941D24504469005BE553 /* RCReaderViewController.swift in Sources */,
+				ACE0000000000000000A002 /* RC2ReaderView.swift in Sources */,
+				ACE0000000000000000A004 /* RC2ReaderViewController.swift in Sources */,
+				ACE0000000000000000A006 /* RCSReaderViewController.swift in Sources */,
+				ACE0000000000000000A008 /* RC2ViewerData.swift in Sources */,
+				ACE0000000000000000A00A /* TestMode.swift in Sources */,
 				3E5A6B57230691D900B9D674 /* DLReaderViewController.swift in Sources */,
 				3ECCFC412306AF7C00855D56 /* WebViewController.swift in Sources */,
 				FBB68B4E22F43BB700042971 /* MainView.swift in Sources */,

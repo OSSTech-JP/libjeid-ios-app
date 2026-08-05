@@ -14,7 +14,15 @@ class MainView: UIView {
     let indlButton: UIButton
     let epButton: UIButton
     let rcButton: UIButton
+    let rc2Button: UIButton
+    let rcsButton: UIButton
     let pinButton: UIButton
+
+    /// テストモードのときだけ表示する項目
+    /// (`MainViewController.applyTestMode()`が表示・非表示を切り替えます)
+    var testModeButtons: [UIButton] {
+        return [rc2Button, rcsButton]
+    }
 
     required init(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -37,6 +45,12 @@ class MainView: UIView {
         rcButton = CustomViewUtil.createButton(CustomViewUtil.screenSize)
         rcButton.setTitle("在留カード", for: .normal)
 
+        rc2Button = CustomViewUtil.createButton(CustomViewUtil.screenSize)
+        rc2Button.setTitle("第2世代在留カード", for: .normal)
+
+        rcsButton = CustomViewUtil.createButton(CustomViewUtil.screenSize)
+        rcsButton.setTitle("特定在留カード", for: .normal)
+
         pinButton = CustomViewUtil.createButton(CustomViewUtil.screenSize)
         pinButton.setTitle("暗証番号ステータス", for: .normal)
 
@@ -47,6 +61,8 @@ class MainView: UIView {
         stackView.addArrangedSubview(indlButton)
         stackView.addArrangedSubview(epButton)
         stackView.addArrangedSubview(rcButton)
+        stackView.addArrangedSubview(rc2Button)
+        stackView.addArrangedSubview(rcsButton)
         stackView.addArrangedSubview(pinButton)
 
         super.init(frame: .zero)

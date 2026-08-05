@@ -117,5 +117,9 @@ class OptionsMenuViewController: UIViewController {
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         appDelegate.mainViewController.mainView.epButton.isHidden = !appDelegate
             .mainViewController.mainView.epButton.isHidden
+        // テストモードの切り替え(第2世代在留カード・特定在留カードの表示)。
+        // Android 版はAboutダイアログのロゴ連打で切り替える(`AboutDialogFragment`)。
+        TestMode.toggle()
+        appDelegate.mainViewController.applyTestMode()
     }
 }
