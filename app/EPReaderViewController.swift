@@ -10,10 +10,14 @@ import CoreNFC
 import UIKit
 import libjeid
 
-class EPReaderViewController: WrapperViewController, NFCTagReaderSessionDelegate
+class EPReaderViewController: WrapperViewController, NFCTagReaderSessionDelegate,
+    MrzScanViewControllerDelegate
 {
     let MAX_NUMBER_LENGTH: Int = 9
+    /// 日付入力の最大桁数(西暦4桁のYYYYMMDD)。
     let MAX_DATE_LENGTH: Int = 8
+    /// 日付入力の最小桁数(MRZと同じ西暦下2桁のYYMMDD)。
+    let MIN_DATE_LENGTH: Int = 6
     var epReaderView: EPReaderView!
     var numberField: UITextField!
     var birthDateField: UITextField!
@@ -36,6 +40,14 @@ class EPReaderViewController: WrapperViewController, NFCTagReaderSessionDelegate
         expireDateField.delegate = self
         epReaderView.startButton.addTarget(
             self, action: #selector(pushStartButton), for: .touchUpInside)
+        epReaderView.scanButton.addTarget(
+            self, action: #selector(pushScanButton), for: .touchUpInside)
+        epReaderView.birthDateHelpButton.addTarget(
+            self, action: #selector(pushBirthDateHelpButton),
+            for: .touchUpInside)
+        epReaderView.expireDateHelpButton.addTarget(
+            self, action: #selector(pushExpireDateHelpButton),
+            for: .touchUpInside)
 
         let wrapperView = WrapperView(epReaderView)
         wrapperView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
@@ -63,6 +75,76 @@ class EPReaderViewController: WrapperViewController, NFCTagReaderSessionDelegate
             self.session?.alertMessage = "パスポートに端末をかざしてください"
             self.session?.begin()
             self.epReaderView.startButton.alpha = Self.INACTIVE_ALPHA
+        }
+    }
+
+    /// MRZ読み取り画面を開きます。
+    @objc func pushScanButton(sender: UIButton) {
+        if let activeField = self.activeField {
+            activeField.resignFirstResponder()
+        }
+        let scanViewController = MrzScanViewController()
+        scanViewController.delegate = self
+        self.present(scanViewController, animated: true, completion: nil)
+    }
+
+    @objc func pushBirthDateHelpButton(sender: UIButton) {
+        openDateFormatHelp("生年月日")
+    }
+
+    @objc func pushExpireDateHelpButton(sender: UIButton) {
+        openDateFormatHelp("有効期限")
+    }
+
+    /// 日付欄の入力形式を説明するダイアログを表示します。
+    ///
+    /// 読み取りに使うのはMRZと同じ2桁年のためラベルはYYMMDDとしているが、
+    /// 西暦4桁で入力したいという要望にも応えるため8桁も受け付けている。
+    /// ラベルだけでは4桁も可であることが伝わらないため、ここで具体例を示す。
+    ///
+    /// - Parameter label: 対象の項目名
+    func openDateFormatHelp(_ label: String) {
+        let message =
+            "西暦の下2桁から続けて、年月日を6桁で入力してください。\n\n"
+            + "例) 1990年11月8日 → 901108\n"
+            + "例) 2026年5月20日 → 260520\n\n"
+            + "西暦4桁のYYYYMMDD(8桁)でも入力できます。\n\n"
+            + "例) 1990年11月8日 → 19901108\n"
+            + "例) 2026年5月20日 → 20260520\n\n"
+            + "パスポート券面下部のMRZ(機械読取領域)には西暦の下2桁が記載されているため、"
+            + "カメラで読み取った場合は6桁が入ります。"
+        openAlertView("\(label)の入力形式", message)
+    }
+
+    /// MRZ読み取り結果を入力欄へ反映します。日付はMRZと同じYYMMDDの6桁で渡されます。
+    func mrzScanViewController(
+        _ controller: MrzScanViewController,
+        didScan documentNumber: String,
+        birthDate: String,
+        expirationDate: String
+    ) {
+        print("MRZ scanned, number=\(documentNumber)")
+        self.numberField.text = documentNumber
+        self.birthDateField.text = birthDate
+        self.expireDateField.text = expirationDate
+        self.publishLog("# MRZを読み取りました。読み取り開始ボタンを押してください")
+    }
+
+    /// 日付入力をMRZと同じYYMMDDの6桁へ揃えます。
+    ///
+    /// 読み取りに使うのは2桁年。西暦4桁での入力も受け付けるため、
+    /// 8桁で渡された場合は先頭2桁を落として6桁へ揃える。
+    ///
+    /// - Parameter value: 入力された日付
+    /// - Returns: 6桁へ揃えた日付。桁数が6でも8でもない場合は `nil`
+    private func normalizeDate(_ value: String) -> String? {
+        switch value.count {
+        case MIN_DATE_LENGTH:
+            return value
+        case MAX_DATE_LENGTH:
+            return String(value.dropFirst(2))
+        default:
+            return nil
         }
     }
 
@@ -156,11 +238,10 @@ class EPReaderViewController: WrapperViewController, NFCTagReaderSessionDelegate
                         errorMessage: "\(msgErrorHeader)生年月日が入力されていません")
                     return
                 }
-                let birthDate = self.birthDate!
-                if birthDate.count != self.MAX_DATE_LENGTH {
-                    self.publishLog("生年月日が8桁ではありません")
+                guard let birthDate = self.normalizeDate(self.birthDate!) else {
+                    self.publishLog("生年月日は6桁(YYMMDD)または8桁(YYYYMMDD)で入力してください")
                     session.invalidate(
-                        errorMessage: "\(msgErrorHeader)生年月日が8桁ではありません")
+                        errorMessage: "\(msgErrorHeader)生年月日の桁数が正しくありません")
                     return
                 }
                 if self.expireDate == nil || self.expireDate!.isEmpty {
@@ -169,26 +250,16 @@ class EPReaderViewController: WrapperViewController, NFCTagReaderSessionDelegate
                         errorMessage: "\(msgErrorHeader)有効期限が入力されていません")
                     return
                 }
-                let expireDate = self.expireDate!
-                if expireDate.count != self.MAX_DATE_LENGTH {
-                    self.publishLog("有効期限が8桁ではありません")
+                guard let expireDate = self.normalizeDate(self.expireDate!)
+                else {
+                    self.publishLog("有効期限は6桁(YYMMDD)または8桁(YYYYMMDD)で入力してください")
                     session.invalidate(
-                        errorMessage: "\(msgErrorHeader)有効期限が8桁ではありません")
+                        errorMessage: "\(msgErrorHeader)有効期限の桁数が正しくありません")
                     return
                 }
                 do {
-                    let epKey = try EPKey(
-                        self.number!,
-                        String(
-                            birthDate[
-                                birthDate.index(
-                                    birthDate.startIndex, offsetBy: 2)..<birthDate
-                                    .endIndex]),
-                        String(
-                            expireDate[
-                                expireDate.index(
-                                    expireDate.startIndex, offsetBy: 2)..<expireDate
-                                    .endIndex]))
+                    // MRZと同じ2桁年をそのまま鍵導出へ渡す
+                    let epKey = try EPKey(self.number!, birthDate, expireDate)
                     // PACE 対応カードではまず PACE を試行し、失敗時は BAC にフォールバックする
                     session.alertMessage = "\(msgReadingHeader)Access Control開始..."
                     self.publishLog("## Access Control開始")

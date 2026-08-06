@@ -59,6 +59,52 @@ class CustomViewUtil: UIView {
         return button
     }
 
+    /// SFシンボルのみを表示する正方形のボタンを生成します。
+    ///
+    /// 背景は透明とし、必要な呼び出し元が `backgroundColor` と `layer.cornerRadius` を
+    /// 設定して枠付きにする。
+    ///
+    /// - Parameters:
+    ///   - size: 画面サイズ
+    ///   - systemName: SFシンボル名
+    /// - Returns: 生成したボタン
+    static func createIconButton(_ size: CGSize, systemName: String) -> UIButton
+    {
+        let button = CustomButton(type: .custom)
+        button.backgroundColor = .clear
+        button.highlightedBackgroundColor =
+            CustomColor.menuItemHighlightedBackground
+        button.tintColor = CustomColor.text
+        let pointSize = CGFloat(
+            min(size.width, size.height) / MEDIUM_TEXT_SIZE_DENOMINATOR)
+        let configuration = UIImage.SymbolConfiguration(pointSize: pointSize)
+        button.setImage(
+            UIImage(systemName: systemName, withConfiguration: configuration),
+            for: .normal)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        // 指で押しやすい寸法を確保する(Human Interface Guidelinesの44pt)
+        let side = max(
+            CGFloat(44),
+            CGFloat(min(size.width, size.height) / TEXT_FIELD_HEIGHT_DENOMINATOR
+            ))
+        button.widthAnchor.constraint(equalToConstant: side).isActive = true
+        button.heightAnchor.constraint(equalToConstant: side).isActive = true
+        return button
+    }
+
+    static func createHorizontalStackView(_ size: CGSize) -> UIStackView {
+        let stackView = UIStackView(frame: .zero)
+        stackView.axis = .horizontal
+        stackView.alignment = .center
+        stackView.distribution = .fill
+        let spacing = CGFloat(
+            min(size.width, size.height) / STACK_VIEW_NARROW_SPACING_DENOMINATOR
+        )
+        stackView.spacing = spacing
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        return stackView
+    }
+
     static func createMenuItem(_ size: CGSize) -> UIButton {
         let button = CustomButton(type: .custom)
         button.backgroundColor = CustomColor.optionsMenuItemBackground

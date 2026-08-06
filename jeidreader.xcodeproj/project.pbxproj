@@ -16,6 +16,11 @@
 		3E4B9853256522BD00958CDA /* OptionsMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E4B9852256522BD00958CDA /* OptionsMenuView.swift */; };
 		3E4B985525652AB500958CDA /* OptionsMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E4B985425652AB500958CDA /* OptionsMenuViewController.swift */; };
 		3E4C8A42243C64640038BC5A /* libjeid.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E4C8A41243C64640038BC5A /* libjeid.xcframework */; };
+		ACE00000000000000000B002 /* MrzGuideOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACE00000000000000000B001 /* MrzGuideOverlayView.swift */; };
+		ACE00000000000000000B004 /* MrzNormalizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACE00000000000000000B003 /* MrzNormalizer.swift */; };
+		ACE00000000000000000B006 /* MrzScanResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACE00000000000000000B005 /* MrzScanResult.swift */; };
+		ACE00000000000000000B008 /* MrzScanViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACE00000000000000000B007 /* MrzScanViewController.swift */; };
+		ACE00000000000000000B00A /* MrzTd3Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACE00000000000000000B009 /* MrzTd3Parser.swift */; };
 		3E4D626425528CDC000BA6EC /* EPReaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E4D626225528CDC000BA6EC /* EPReaderView.swift */; };
 		3E4D626525528CDC000BA6EC /* EPReaderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E4D626325528CDC000BA6EC /* EPReaderViewController.swift */; };
 		3E4EF865238F9CD400DF3747 /* PinStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E4EF864238F9CD300DF3747 /* PinStatusView.swift */; };
@@ -67,6 +72,11 @@
 		3E4B9852256522BD00958CDA /* OptionsMenuView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OptionsMenuView.swift; sourceTree = "<group>"; };
 		3E4B985425652AB500958CDA /* OptionsMenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OptionsMenuViewController.swift; sourceTree = "<group>"; };
 		3E4C8A41243C64640038BC5A /* libjeid.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = libjeid.xcframework; sourceTree = "<group>"; };
+		ACE00000000000000000B001 /* MrzGuideOverlayView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MrzGuideOverlayView.swift; sourceTree = "<group>"; };
+		ACE00000000000000000B003 /* MrzNormalizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MrzNormalizer.swift; sourceTree = "<group>"; };
+		ACE00000000000000000B005 /* MrzScanResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MrzScanResult.swift; sourceTree = "<group>"; };
+		ACE00000000000000000B007 /* MrzScanViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MrzScanViewController.swift; sourceTree = "<group>"; };
+		ACE00000000000000000B009 /* MrzTd3Parser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MrzTd3Parser.swift; sourceTree = "<group>"; };
 		3E4D626225528CDC000BA6EC /* EPReaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EPReaderView.swift; sourceTree = "<group>"; };
 		3E4D626325528CDC000BA6EC /* EPReaderViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EPReaderViewController.swift; sourceTree = "<group>"; };
 		3E4EF864238F9CD300DF3747 /* PinStatusView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinStatusView.swift; sourceTree = "<group>"; };
@@ -138,6 +148,18 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		ACE00000000000000000B00B /* ocr */ = {
+			isa = PBXGroup;
+			children = (
+				ACE00000000000000000B001 /* MrzGuideOverlayView.swift */,
+				ACE00000000000000000B003 /* MrzNormalizer.swift */,
+				ACE00000000000000000B005 /* MrzScanResult.swift */,
+				ACE00000000000000000B007 /* MrzScanViewController.swift */,
+				ACE00000000000000000B009 /* MrzTd3Parser.swift */,
+			);
+			path = ocr;
+			sourceTree = "<group>";
+		};
 		FBB68B3622F4267A00042971 /* app */ = {
 			isa = PBXGroup;
 			children = (
@@ -157,6 +179,7 @@
 				3EFFEE0100000000000000A3 /* INDLReaderViewController.swift */,
 				FBB68B4D22F43BB700042971 /* MainView.swift */,
 				FBB68B3B22F4267A00042971 /* MainViewController.swift */,
+				ACE00000000000000000B00B /* ocr */,
 				3E4B9852256522BD00958CDA /* OptionsMenuView.swift */,
 				3E4B985425652AB500958CDA /* OptionsMenuViewController.swift */,
 				3E4EF864238F9CD300DF3747 /* PinStatusView.swift */,
@@ -270,6 +293,11 @@
 				3E4EF867238F9CE000DF3747 /* PinStatusViewController.swift in Sources */,
 				3E5A6B5323068EBE00B9D674 /* DLReaderView.swift in Sources */,
 				3E4D626425528CDC000BA6EC /* EPReaderView.swift in Sources */,
+				ACE00000000000000000B002 /* MrzGuideOverlayView.swift in Sources */,
+				ACE00000000000000000B004 /* MrzNormalizer.swift in Sources */,
+				ACE00000000000000000B006 /* MrzScanResult.swift in Sources */,
+				ACE00000000000000000B008 /* MrzScanViewController.swift in Sources */,
+				ACE00000000000000000B00A /* MrzTd3Parser.swift in Sources */,
 				3EA6BD1A23713FCD00529CC6 /* INReaderViewController.swift in Sources */,
 				3EFFEE0100000000000000A2 /* INDLReaderView.swift in Sources */,
 				3EFFEE0100000000000000A4 /* INDLReaderViewController.swift in Sources */,
@@ -344,7 +372,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -403,7 +431,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -427,7 +455,7 @@
 					"$(PROJECT_DIR)/Frameworks",
 				);
 				INFOPLIST_FILE = app/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -452,7 +480,7 @@
 					"$(PROJECT_DIR)/Frameworks",
 				);
 				INFOPLIST_FILE = app/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

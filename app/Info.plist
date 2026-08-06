@@ -24,6 +24,8 @@
 	<true/>
 	<key>NFCReaderUsageDescription</key>
 	<string>For reading ID card.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>パスポート下部のMRZ(機械読取領域)を読み取り、パスポート番号・生年月日・有効期限を自動入力するために使用します。</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIRequiredDeviceCapabilities</key>
