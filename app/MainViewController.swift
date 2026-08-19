@@ -32,21 +32,11 @@ class MainViewController: WrapperViewController {
             self, action: #selector(pushRcsButton), for: .touchUpInside)
         mainView.pinButton.addTarget(
             self, action: #selector(pushPinButton), for: .touchUpInside)
-        self.applyTestMode()
 
         let wrapperView = WrapperView(mainView)
         wrapperView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         wrapperView.logView.isHidden = true
         self.view = wrapperView
-    }
-
-    /// テストモードのときだけ表示する項目の表示・非表示を更新します。
-    /// オプションメニューでテストモードが切り替わったときにも呼ばれます。
-    func applyTestMode() {
-        let hidden = !TestMode.isEnabled
-        for button in mainView.testModeButtons {
-            button.isHidden = hidden
-        }
     }
 
     @objc func pushInButton(sender: UIButton) {

@@ -18,12 +18,6 @@ class MainView: UIView {
     let rcsButton: UIButton
     let pinButton: UIButton
 
-    /// テストモードのときだけ表示する項目
-    /// (`MainViewController.applyTestMode()`が表示・非表示を切り替えます)
-    var testModeButtons: [UIButton] {
-        return [rc2Button, rcsButton]
-    }
-
     required init(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
