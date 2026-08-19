@@ -21,6 +21,10 @@ class CustomViewUtil: UIView {
     private static let STACK_VIEW_WIDE_SPACING_DENOMINATOR = CGFloat(20)
     private static let STACK_VIEW_NARROW_SPACING_DENOMINATOR = CGFloat(50)
     private static let AUTO_LAYOUT_PADDING_DENOMINATOR = CGFloat(20)
+    private static let CAPTION_TEXT_SIZE_DENOMINATOR = CGFloat(28)
+    private static let MENU_CARD_CORNER_RADIUS = CGFloat(12)
+    private static let MENU_CARD_PADDING = CGFloat(16)
+    private static let MENU_CARD_TEXT_SPACING = CGFloat(2)
 
     static func createLargeTextFont(_ size: CGSize) -> UIFont {
         let fontSize = CGFloat(
@@ -40,6 +44,12 @@ class CustomViewUtil: UIView {
         return UIFont.systemFont(ofSize: fontSize)
     }
 
+    static func createCaptionTextFont(_ size: CGSize) -> UIFont {
+        let fontSize = CGFloat(
+            min(size.width, size.height) / CAPTION_TEXT_SIZE_DENOMINATOR)
+        return UIFont.systemFont(ofSize: fontSize)
+    }
+
     static func getAutoLayoutPadding(_ size: CGSize) -> CGFloat {
         return CGFloat(
             min(size.width, size.height) / AUTO_LAYOUT_PADDING_DENOMINATOR)
@@ -56,6 +66,100 @@ class CustomViewUtil: UIView {
             min(size.width, size.height) / BUTTON_LABEL_FONT_SIZE_DENOMINATOR)
         button.titleLabel?.font = UIFont.systemFont(ofSize: fontSize)
         button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }
+
+    /// メニュー項目のカードを生成します。
+    ///
+    /// アイコン、タイトル、説明、シェブロンを横に並べた角丸のボタンです。
+    /// 内容のビューはタッチを受け取らないため、どこを押してもボタンが反応します。
+    ///
+    /// - Parameters:
+    ///   - size: 画面サイズ
+    ///   - systemName: 左に表示するSFシンボル名
+    ///   - title: 項目名
+    ///   - description: 項目の説明
+    /// - Returns: 生成したボタン
+    static func createMenuCard(
+        _ size: CGSize, systemName: String, title: String, description: String
+    ) -> UIButton {
+        let button = CustomButton(type: .custom)
+        button.backgroundColor = CustomColor.menuItemBackground
+        button.highlightedBackgroundColor =
+            CustomColor.menuItemHighlightedBackground
+        button.layer.cornerRadius = MENU_CARD_CORNER_RADIUS
+        button.translatesAutoresizingMaskIntoConstraints = false
+
+        let iconPointSize = CGFloat(
+            min(size.width, size.height) / TEXT_FIELD_HEIGHT_DENOMINATOR)
+        let iconView = UIImageView(
+            image: UIImage(
+                systemName: systemName,
+                withConfiguration: UIImage.SymbolConfiguration(
+                    pointSize: iconPointSize)))
+        iconView.tintColor = CustomColor.menuItemIcon
+        iconView.contentMode = .scaleAspectFit
+
+        let titleLabel = UILabel()
+        titleLabel.text = title
+        titleLabel.textColor = CustomColor.menuItemTitle
+        titleLabel.font = UIFont.boldSystemFont(
+            ofSize: CGFloat(
+                min(size.width, size.height) / MEDIUM_TEXT_SIZE_DENOMINATOR))
+        titleLabel.numberOfLines = 0
+
+        let descriptionLabel = UILabel()
+        descriptionLabel.text = description
+        descriptionLabel.textColor = CustomColor.menuItemDescription
+        descriptionLabel.font = createCaptionTextFont(size)
+        descriptionLabel.numberOfLines = 0
+
+        let chevronView = UIImageView(
+            image: UIImage(
+                systemName: "chevron.right",
+                withConfiguration: UIImage.SymbolConfiguration(
+                    pointSize: createCaptionTextFont(size).pointSize)))
+        chevronView.tintColor = CustomColor.menuItemChevron
+        chevronView.contentMode = .scaleAspectFit
+
+        let textStackView = UIStackView(
+            arrangedSubviews: [titleLabel, descriptionLabel])
+        textStackView.axis = .vertical
+        textStackView.alignment = .fill
+        textStackView.distribution = .fill
+        textStackView.spacing = MENU_CARD_TEXT_SPACING
+
+        let stackView = UIStackView(
+            arrangedSubviews: [iconView, textStackView, chevronView])
+        stackView.axis = .horizontal
+        stackView.alignment = .center
+        stackView.distribution = .fill
+        stackView.spacing = MENU_CARD_PADDING
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        // タップをボタンへ通すため、内容はタッチを受け取らないようにする
+        stackView.isUserInteractionEnabled = false
+        button.addSubview(stackView)
+
+        // アイコンとシェブロンは固有の幅を保ち、余った幅は文字に割り当てる
+        for view in [iconView, chevronView] {
+            view.setContentHuggingPriority(.required, for: .horizontal)
+            view.setContentCompressionResistancePriority(
+                .required, for: .horizontal)
+        }
+
+        NSLayoutConstraint.activate([
+            stackView.topAnchor.constraint(
+                equalTo: button.topAnchor, constant: MENU_CARD_PADDING),
+            stackView.bottomAnchor.constraint(
+                equalTo: button.bottomAnchor, constant: MENU_CARD_PADDING * -1),
+            stackView.leadingAnchor.constraint(
+                equalTo: button.leadingAnchor, constant: MENU_CARD_PADDING),
+            stackView.trailingAnchor.constraint(
+                equalTo: button.trailingAnchor,
+                constant: MENU_CARD_PADDING * -1),
+            iconView.widthAnchor.constraint(
+                equalToConstant: iconPointSize * 1.25),
+        ])
         return button
     }
 
@@ -105,21 +209,38 @@ class CustomViewUtil: UIView {
         return stackView
     }
 
+    /// オプションメニューの項目を生成します。
+    ///
+    /// 題名は呼び出し元が`setTitle(_:for:)`で設定します。
+    ///
+    /// - Parameter size: 画面サイズ
+    /// - Returns: 生成したボタン
     static func createMenuItem(_ size: CGSize) -> UIButton {
-        let button = CustomButton(type: .custom)
-        button.backgroundColor = CustomColor.optionsMenuItemBackground
-        button.highlightedBackgroundColor =
-            CustomColor.menuItemHighlightedBackground
-        button.setTitleColor(CustomColor.optionsMenuItemTitle, for: .normal)
-        button.setTitleColor(
-            CustomColor.optionsMenuItemTitle, for: .highlighted)
+        let button = UIButton(type: .custom)
         let fontSize = CGFloat(
             min(size.width, size.height) / SMALL_TEXT_SIZE_DENOMINATOR)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: fontSize)
-        button.contentHorizontalAlignment = .left
-        button.contentEdgeInsets = UIEdgeInsets(
-            top: fontSize * 0.75, left: fontSize * 0.75,
-            bottom: fontSize * 0.75, right: fontSize * 0.75)
+        var configuration = UIButton.Configuration.plain()
+        configuration.contentInsets = NSDirectionalEdgeInsets(
+            top: fontSize * 0.75, leading: fontSize * 0.75,
+            bottom: fontSize * 0.75, trailing: fontSize * 0.75)
+        configuration.baseForegroundColor = CustomColor.optionsMenuItemTitle
+        // setTitle()で設定された題名にフォントを適用する
+        configuration.titleTextAttributesTransformer =
+            UIConfigurationTextAttributesTransformer { incoming in
+                var outgoing = incoming
+                outgoing.font = UIFont.systemFont(ofSize: fontSize)
+                return outgoing
+            }
+        button.configuration = configuration
+        button.contentHorizontalAlignment = .leading
+        // CustomButtonのbackgroundColor差し替えはconfigurationと併用できないため、
+        // 押下時の背景はconfigurationUpdateHandlerで切り替える
+        button.configurationUpdateHandler = { button in
+            button.configuration?.background.backgroundColor =
+                button.isHighlighted
+                ? CustomColor.menuItemHighlightedBackground
+                : CustomColor.optionsMenuItemBackground
+        }
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }

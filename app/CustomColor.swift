@@ -82,6 +82,35 @@ class CustomColor {
             dark: createUIColor(hex: 0x48484A, alpha: 1.0))
     }
 
+    // メニュー項目(カード)の配色
+    static var menuItemBackground: UIColor {
+        return dynamicColor(
+            light: createUIColor(hex: 0xF2F2F7, alpha: 1.0),
+            dark: createUIColor(hex: 0x2C2C2E, alpha: 1.0))
+    }
+
+    static var menuItemIcon: UIColor {
+        return dynamicColor(
+            light: createUIColor(hex: 0x3F51B5, alpha: 1.0),
+            dark: createUIColor(hex: 0x8C9EFF, alpha: 1.0))
+    }
+
+    static var menuItemTitle: UIColor {
+        return text
+    }
+
+    static var menuItemDescription: UIColor {
+        return dynamicColor(
+            light: createUIColor(hex: 0x636366, alpha: 1.0),
+            dark: createUIColor(hex: 0xAEAEB2, alpha: 1.0))
+    }
+
+    static var menuItemChevron: UIColor {
+        return dynamicColor(
+            light: createUIColor(hex: 0xC7C7CC, alpha: 1.0),
+            dark: createUIColor(hex: 0x636366, alpha: 1.0))
+    }
+
     private class func dynamicColor(light: UIColor, dark: UIColor) -> UIColor {
         return UIColor { (traitCollection) -> UIColor in
             switch traitCollection.userInterfaceStyle {

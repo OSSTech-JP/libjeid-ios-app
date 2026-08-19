@@ -23,30 +23,54 @@ class MainView: UIView {
     }
 
     init() {
-        inButton = CustomViewUtil.createButton(CustomViewUtil.screenSize)
-        inButton.setTitle("マイナンバーカード", for: .normal)
+        inButton = CustomViewUtil.createMenuCard(
+            CustomViewUtil.screenSize,
+            systemName: "person.text.rectangle",
+            title: "マイナンバーカード",
+            description: "氏名・住所など券面事項を読み取り")
 
-        dlButton = CustomViewUtil.createButton(CustomViewUtil.screenSize)
-        dlButton.setTitle("運転免許証", for: .normal)
+        dlButton = CustomViewUtil.createMenuCard(
+            CustomViewUtil.screenSize,
+            systemName: "car",
+            title: "運転免許証",
+            description: "ICチップの記録事項を読み取り")
 
-        indlButton = CustomViewUtil.createButton(CustomViewUtil.screenSize)
-        indlButton.setTitle("マイナ免許証", for: .normal)
+        indlButton = CustomViewUtil.createMenuCard(
+            CustomViewUtil.screenSize,
+            systemName: "car",
+            title: "マイナ免許証",
+            description: "カードに記録された免許情報を読み取り")
 
-        epButton = CustomViewUtil.createButton(CustomViewUtil.screenSize)
-        epButton.setTitle("パスポート", for: .normal)
+        epButton = CustomViewUtil.createMenuCard(
+            CustomViewUtil.screenSize,
+            systemName: "book.closed",
+            title: "パスポート",
+            description: "券面情報と顔画像を読み取り")
         //epButton.isHidden = true
 
-        rcButton = CustomViewUtil.createButton(CustomViewUtil.screenSize)
-        rcButton.setTitle("在留カード", for: .normal)
+        rcButton = CustomViewUtil.createMenuCard(
+            CustomViewUtil.screenSize,
+            systemName: "globe",
+            title: "在留カード",
+            description: "第1世代の在留カード・特別永住者証明書")
 
-        rc2Button = CustomViewUtil.createButton(CustomViewUtil.screenSize)
-        rc2Button.setTitle("第2世代在留カード", for: .normal)
+        rc2Button = CustomViewUtil.createMenuCard(
+            CustomViewUtil.screenSize,
+            systemName: "globe",
+            title: "第2世代在留カード",
+            description: "第2世代の在留カード")
 
-        rcsButton = CustomViewUtil.createButton(CustomViewUtil.screenSize)
-        rcsButton.setTitle("特定在留カード", for: .normal)
+        rcsButton = CustomViewUtil.createMenuCard(
+            CustomViewUtil.screenSize,
+            systemName: "globe",
+            title: "特定在留カード",
+            description: "マイナンバーカード上の在留情報を読み取り")
 
-        pinButton = CustomViewUtil.createButton(CustomViewUtil.screenSize)
-        pinButton.setTitle("暗証番号ステータス", for: .normal)
+        pinButton = CustomViewUtil.createMenuCard(
+            CustomViewUtil.screenSize,
+            systemName: "lock",
+            title: "暗証番号ステータス",
+            description: "暗証番号の残り試行回数を確認")
 
         let stackView = CustomViewUtil.createVerticalStackView(
             CustomViewUtil.screenSize)
