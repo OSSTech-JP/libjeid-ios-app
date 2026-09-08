@@ -166,16 +166,22 @@ class RCReaderViewController: WrapperViewController, NFCTagReaderSessionDelegate
                 if let type = cardType.type {
                     dataDict["rc-card-type"] = type
                 }
+                // libjeid が返す汎用画像(CGImage)をアプリ側で PNG / JPEG に
+                // 変換して渡す。顔写真を JPEG2000 のまま渡すことはできない。
+                // iOS 18 で WebKit が JPEG2000 のサポートを削除したため、
+                // data:image/jp2 は WKWebView で表示できない
                 let cardEntries = try files.getCardEntries()
-                let entriesImage = try cardEntries.pngData()
-                let src =
-                    "data:image/png;base64,\(entriesImage.base64EncodedString())"
-                dataDict["rc-front-image"] = src
+                guard let entriesImage = cardEntries.image,
+                    let entriesSrc = try entriesImage.pngDataUri()
+                else {
+                    throw JeidError.decodeFailed(
+                        message: "failed to decode card entries image")
+                }
+                dataDict["rc-front-image"] = entriesSrc
                 let photo = try files.getPhoto()
-                if let photoImage = photo.photoData {
-                    let src =
-                        "data:image/jp2;base64,\(photoImage.base64EncodedString())"
-                    dataDict["rc-photo"] = src
+                if let photoImage = photo.image,
+                    let photoSrc = try photoImage.jpegDataUri() {
+                    dataDict["rc-photo"] = photoSrc
                 }
 
                 let address = try files.getAddress()
